@@ -31,6 +31,9 @@
                                     },
                                     "password" : {
                                         "type" : "string"
+                                    },
+                                    "password_confirmation" : {
+                                        "type" : "string"
                                     }
                                 },
                                 "required" : [
@@ -59,11 +62,29 @@
                                         "data" : {
                                             "type" : "object",
                                             "properties" : {
-                                                "accessToken" : {
-                                                    "type" : "string"
+                                               "id" : {
+                                                    "type": "string"
                                                 },
-                                                "refreshToken" : {
-                                                    "type" : "string"
+                                               "uniqId" : {
+                                                    "type": "string"
+                                                },
+                                                "name" : {
+                                                    "type": "string"
+                                                },
+                                                "email" : {
+                                                        "type": "string"
+                                                },
+                                                "roleId" : {
+                                                        "type": "integer"
+                                                },
+                                                "roleName" : {
+                                                        "type": "string"
+                                                },
+                                                "createdAt" : {
+                                                        "type": "string"
+                                                },
+                                                "updatedAt" : {
+                                                        "type": "string"
                                                 }
                                             }
                                         }
@@ -126,9 +147,6 @@
                                             "type": "object",
                                             "properties": {
                                                 "accessToken": {
-                                                    "type": "string"
-                                                },
-                                                "refreshToken": {
                                                     "type": "string"
                                                 }
                                             }
@@ -243,9 +261,6 @@
                                             "type" : "object",
                                             "properties" : {
                                                 "accessToken" : {
-                                                    "type" : "string"
-                                                },
-                                                "refreshToken" : {
                                                     "type" : "string"
                                                 }
                                             }
