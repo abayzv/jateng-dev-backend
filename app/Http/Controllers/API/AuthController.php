@@ -46,7 +46,7 @@ class AuthController extends Controller
             "status" => true,
             "message" => "Login Success",
             "data" => [
-                'accessToken' => $token,
+                'access_token' => $token,
             ]
         ]);
     }
@@ -107,7 +107,7 @@ class AuthController extends Controller
             "status" => true,
             "message" => "Refresh Token Success",
             "data" => [
-                'accessToken' => Auth::refresh(),
+                'access_token' => Auth::refresh(),
             ]
         ]);
     }

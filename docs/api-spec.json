@@ -23,6 +23,9 @@
                             "schema" : {
                                 "type" : "object",
                                 "properties" : {
+                                    "id" : {
+                                        "type" : "integer"
+                                    },
                                     "name" : {
                                         "type" : "string"
                                     },
@@ -65,7 +68,7 @@
                                                "id" : {
                                                     "type": "string"
                                                 },
-                                               "uniqId" : {
+                                               "uniq_id" : {
                                                     "type": "string"
                                                 },
                                                 "name" : {
@@ -74,11 +77,8 @@
                                                 "email" : {
                                                         "type": "string"
                                                 },
-                                                "roleId" : {
+                                                "role_id" : {
                                                         "type": "integer"
-                                                },
-                                                "roleName" : {
-                                                        "type": "string"
                                                 },
                                                 "createdAt" : {
                                                         "type": "string"
@@ -146,7 +146,7 @@
                                         "data": {
                                             "type": "object",
                                             "properties": {
-                                                "accessToken": {
+                                                "access_token": {
                                                     "type": "string"
                                                 }
                                             }
@@ -202,16 +202,13 @@
                                                         "email" : {
                                                             "type" : "string"
                                                         },
-                                                        "roleId" : {
+                                                        "role_id" : {
                                                             "type" : "integer"
                                                         },
-                                                        "roleName" : {
+                                                        "created_at" : {
                                                             "type" : "string"
                                                         },
-                                                        "createdAt" : {
-                                                            "type" : "string"
-                                                        },
-                                                        "updatedAt" : {
+                                                        "updated_at" : {
                                                             "type" : "string"
                                                         }
                                                     }
@@ -260,7 +257,7 @@
                                         "data" : {
                                             "type" : "object",
                                             "properties" : {
-                                                "accessToken" : {
+                                                "access_token" : {
                                                     "type" : "string"
                                                 }
                                             }

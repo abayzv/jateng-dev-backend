@@ -1,0 +1,319 @@
+{
+    "openapi" : "3.0.3",
+    "info" : {
+        "title" : "Web Carbon Authentication API",
+        "description" : "Web Carbon Authentication API",
+        "version" : "1.0.0"
+    },
+    "servers" : [
+        {
+            "url" : "http://localhost:8000"
+        }
+    ],
+    "paths" : {
+        "/api/v1/register" : {
+            "post" : {
+                "tags" : [
+                    "Authentication"
+                ],
+                "summary" : "Register a new user",
+                "requestBody" : {
+                    "content" : {
+                        "application/json" : {
+                            "schema" : {
+                                "type" : "object",
+                                "properties" : {
+                                    "name" : {
+                                        "type" : "string"
+                                    },
+                                    "email" : {
+                                        "type" : "string"
+                                    },
+                                    "password" : {
+                                        "type" : "string"
+                                    },
+                                    "password_confirmation" : {
+                                        "type" : "string"
+                                    }
+                                },
+                                "required" : [
+                                    "name",
+                                    "email",
+                                    "password"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses" : {
+                    "200" : {
+                        "description" : "User registered successfully",
+                        "content" : {
+                            "application/json" : {
+                                "schema" : {
+                                    "type" : "object",
+                                    "properties" : {
+                                        "status" : {
+                                            "type" : "boolean"
+                                        },
+                                        "message" : {
+                                            "type" : "string"
+                                        },
+                                        "data" : {
+                                            "type" : "object",
+                                            "properties" : {
+                                               "id" : {
+                                                    "type": "string"
+                                                },
+                                               "uniq_id" : {
+                                                    "type": "string"
+                                                },
+                                                "name" : {
+                                                    "type": "string"
+                                                },
+                                                "email" : {
+                                                        "type": "string"
+                                                },
+                                                "role_id" : {
+                                                        "type": "integer"
+                                                },
+                                                "createdAt" : {
+                                                        "type": "string"
+                                                },
+                                                "updatedAt" : {
+                                                        "type": "string"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400" : {
+                        "description" : "Bad request"
+                    },
+                    "500" : {
+                        "description" : "Internal server error"
+                    }
+                }
+            }
+        },
+        "/api/v1/admin/login" : {
+            "post" : {
+                "tags" : [
+                    "Authentication"
+                ],
+                "summary" : "Login as admin",
+                "requestBody" : {
+                    "content" : {
+                        "application/json" : {
+                            "schema" : {
+                                "type" : "object",
+                                "properties" : {
+                                    "email" : {
+                                        "type" : "string"
+                                    },
+                                    "password" : {
+                                        "type" : "string"
+                                    }
+                                },
+                                "required" : [
+                                    "email",
+                                    "password"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses" : {
+                    "200" : {
+                        "description": "Admin logged in successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                       "status": {
+                                           "type": "boolean"
+                                       },
+                                        "message": {
+                                             "type": "string"
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "access_token": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400" : {
+                        "description" : "Bad request"
+                    },
+                    "500" : {
+                        "description" : "Internal server error"
+                    }
+                }
+            }
+        },
+        "/api/v1/me" : {
+            "get" : {
+                "tags" : [
+                    "Authentication"
+                ],
+                "summary" : "Get user details",
+                "security" : [
+                    {
+                        "bearerAuth" : []
+                    }
+                ],
+                "responses" : {
+                    "200" : {
+                        "description" : "User details fetched successfully",
+                        "content" : {
+                            "application/json" : {
+                                "schema" : {
+                                    "type" : "object",
+                                    "properties" : {
+                                        "status" : {
+                                            "type" : "boolean"
+                                        },
+                                        "message" : {
+                                            "type" : "string"
+                                        },
+                                        "data" : {
+                                            "type" : "object",
+                                            "properties" : {
+                                                "user" : {
+                                                    "type" : "object",
+                                                    "properties" : {
+                                                        "id" : {
+                                                            "type" : "integer"
+                                                        },
+                                                        "name" : {
+                                                            "type" : "string"
+                                                        },
+                                                        "email" : {
+                                                            "type" : "string"
+                                                        },
+                                                        "role_id" : {
+                                                            "type" : "integer"
+                                                        },
+                                                        "created_at" : {
+                                                            "type" : "string"
+                                                        },
+                                                        "updated_at" : {
+                                                            "type" : "string"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401" : {
+                        "description" : "Unauthorized"
+                    },
+                    "500" : {
+                        "description" : "Internal server error"
+                    }
+                }
+            }
+        },
+        "/api/v1/refresh-token" :{
+            "post" : {
+                "tags" : [
+                    "Authentication"
+                ],
+                "summary" : "Refresh user token",
+                "security" : [
+                    {
+                        "bearerAuth" : []
+                    }
+                ],
+                "responses" : {
+                    "200" : {
+                        "description" : "Token refreshed successfully",
+                        "content" : {
+                            "application/json" : {
+                                "schema" : {
+                                    "type" : "object",
+                                    "properties" : {
+                                        "status" : {
+                                            "type" : "boolean"
+                                        },
+                                        "message" : {
+                                            "type" : "string"
+                                        },
+                                        "data" : {
+                                            "type" : "object",
+                                            "properties" : {
+                                                "access_token" : {
+                                                    "type" : "string"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401" : {
+                        "description" : "Unauthorized"
+                    },
+                    "500" : {
+                        "description" : "Internal server error"
+                    }
+                }
+            }
+        },
+        "/api/v1/logout" : {
+            "post" : {
+                "tags" : [
+                    "Authentication"
+                ],
+                "summary" : "Logout user",
+                "security" : [
+                    {
+                        "bearerAuth" : []
+                    }
+                ],
+                "responses" : {
+                    "200" : {
+                        "description" : "User logged out successfully",
+                        "content" : {
+                            "application/json" : {
+                                "schema" : {
+                                    "type" : "object",
+                                    "properties" : {
+                                        "status" : {
+                                            "type" : "boolean"
+                                        },
+                                        "message" : {
+                                            "type" : "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401" : {
+                        "description" : "Unauthorized"
+                    },
+                    "500" : {
+                        "description" : "Internal server error"
+                    }
+                }
+            }
+        }
+    }
+}
