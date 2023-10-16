@@ -1,0 +1,1090 @@
+{
+    "openapi" : "3.0.3",
+    "info" : {
+        "title" : "Web Carbon API",
+        "description" : "Web Carbon API",
+        "version" : "1.0.0"
+    },
+    "servers" : [
+        {
+            "url" : "http://localhost:8000"
+        }
+    ],
+    "paths" : {
+        "/api/v1/register" : {
+            "post" : {
+                "tags" : [
+                    "Authentication"
+                ],
+                "summary" : "Register a new user",
+                "requestBody" : {
+                    "content" : {
+                        "application/json" : {
+                            "schema" : {
+                                "type" : "object",
+                                "properties" : {
+                                    "name" : {
+                                        "type" : "string"
+                                    },
+                                    "email" : {
+                                        "type" : "string"
+                                    },
+                                    "password" : {
+                                        "type" : "string"
+                                    }
+                                },
+                                "required" : [
+                                    "name",
+                                    "email",
+                                    "password"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses" : {
+                    "200" : {
+                        "description" : "User registered successfully",
+                        "content" : {
+                            "application/json" : {
+                                "schema" : {
+                                    "type" : "object",
+                                    "properties" : {
+                                        "status" : {
+                                            "type" : "boolean"
+                                        },
+                                        "message" : {
+                                            "type" : "string"
+                                        },
+                                        "data" : {
+                                            "type" : "object",
+                                            "properties" : {
+                                                "accessToken" : {
+                                                    "type" : "string"
+                                                },
+                                                "refreshToken" : {
+                                                    "type" : "string"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400" : {
+                        "description" : "Bad request"
+                    },
+                    "500" : {
+                        "description" : "Internal server error"
+                    }
+                }
+            }
+        },
+        "/api/v1/admin/login" : {
+            "post" : {
+                "tags" : [
+                    "Authentication"
+                ],
+                "summary" : "Login as admin",
+                "requestBody" : {
+                    "content" : {
+                        "application/json" : {
+                            "schema" : {
+                                "type" : "object",
+                                "properties" : {
+                                    "email" : {
+                                        "type" : "string"
+                                    },
+                                    "password" : {
+                                        "type" : "string"
+                                    }
+                                },
+                                "required" : [
+                                    "email",
+                                    "password"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses" : {
+                    "200" : {
+                        "description": "Admin logged in successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                       "status": {
+                                           "type": "boolean"
+                                       },
+                                        "message": {
+                                             "type": "string"
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "accessToken": {
+                                                    "type": "string"
+                                                },
+                                                "refreshToken": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400" : {
+                        "description" : "Bad request"
+                    },
+                    "500" : {
+                        "description" : "Internal server error"
+                    }
+                }
+            }
+        },
+        "/api/v1/me" : {
+            "get" : {
+                "tags" : [
+                    "Authentication"
+                ],
+                "summary" : "Get user details",
+                "security" : [
+                    {
+                        "bearerAuth" : []
+                    }
+                ],
+                "responses" : {
+                    "200" : {
+                        "description" : "User details fetched successfully",
+                        "content" : {
+                            "application/json" : {
+                                "schema" : {
+                                    "type" : "object",
+                                    "properties" : {
+                                        "status" : {
+                                            "type" : "boolean"
+                                        },
+                                        "message" : {
+                                            "type" : "string"
+                                        },
+                                        "data" : {
+                                            "type" : "object",
+                                            "properties" : {
+                                                "user" : {
+                                                    "type" : "object",
+                                                    "properties" : {
+                                                        "name" : {
+                                                            "type" : "string"
+                                                        },
+                                                        "email" : {
+                                                            "type" : "string"
+                                                        },
+                                                        "roleId" : {
+                                                            "type" : "integer"
+                                                        },
+                                                        "roleName" : {
+                                                            "type" : "string"
+                                                        },
+                                                        "createdAt" : {
+                                                            "type" : "string"
+                                                        },
+                                                        "updatedAt" : {
+                                                            "type" : "string"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401" : {
+                        "description" : "Unauthorized"
+                    },
+                    "500" : {
+                        "description" : "Internal server error"
+                    }
+                }
+            }
+        },
+        "/api/v1/refresh-token" :{
+            "post" : {
+                "tags" : [
+                    "Authentication"
+                ],
+                "summary" : "Refresh user token",
+                "security" : [
+                    {
+                        "bearerAuth" : []
+                    }
+                ],
+                "responses" : {
+                    "200" : {
+                        "description" : "Token refreshed successfully",
+                        "content" : {
+                            "application/json" : {
+                                "schema" : {
+                                    "type" : "object",
+                                    "properties" : {
+                                        "status" : {
+                                            "type" : "boolean"
+                                        },
+                                        "message" : {
+                                            "type" : "string"
+                                        },
+                                        "data" : {
+                                            "type" : "object",
+                                            "properties" : {
+                                                "accessToken" : {
+                                                    "type" : "string"
+                                                },
+                                                "refreshToken" : {
+                                                    "type" : "string"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401" : {
+                        "description" : "Unauthorized"
+                    },
+                    "500" : {
+                        "description" : "Internal server error"
+                    }
+                }
+            }
+        },
+        "/api/v1/logout" : {
+            "post" : {
+                "tags" : [
+                    "Authentication"
+                ],
+                "summary" : "Logout user",
+                "security" : [
+                    {
+                        "bearerAuth" : []
+                    }
+                ],
+                "responses" : {
+                    "200" : {
+                        "description" : "User logged out successfully",
+                        "content" : {
+                            "application/json" : {
+                                "schema" : {
+                                    "type" : "object",
+                                    "properties" : {
+                                        "status" : {
+                                            "type" : "boolean"
+                                        },
+                                        "message" : {
+                                            "type" : "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401" : {
+                        "description" : "Unauthorized"
+                    },
+                    "500" : {
+                        "description" : "Internal server error"
+                    }
+                }
+            }
+        },
+        "/api/v1/guest" : {
+            "get" : {
+                "tags" : [
+                    "Guest"
+                ],
+                "summary" : "Get All Guest",
+                "security" : [
+                    {
+                        "bearerAuth" : []
+                    }
+                ],
+                "responses" : {
+                    "200" : {
+                        "description" : "Guest fetched successfully",
+                        "content" : {
+                            "application/json" : {
+                                "schema" : {
+                                    "type" : "object",
+                                    "properties" : {
+                                        "status" : {
+                                            "type" : "boolean"
+                                        },
+                                        "message" : {
+                                            "type" : "string"
+                                        },
+                                        "data" : {
+                                            "type" : "array",
+                                            "items" : {
+                                                "type" : "object",
+                                                "properties" : {
+                                                    "id" : {
+                                                        "type" : "integer"
+                                                    },
+                                                    "uniqId" : {
+                                                        "type" : "string"
+                                                    },
+                                                    "firstName" : {
+                                                        "type" : "string"
+                                                    },
+                                                    "lastName" : {
+                                                        "type" : "string"
+                                                    },
+                                                    "location" : {
+                                                        "type" : "string"
+                                                    },
+                                                    "email" : {
+                                                        "type" : "string"
+                                                    },
+                                                    "createdAt" : {
+                                                        "type" : "string"
+                                                    },
+                                                    "updatedAt" : {
+                                                        "type" : "string"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401" : {
+                        "description" : "Unauthorized"
+                    },
+                    "500" : {
+                        "description" : "Internal server error"
+                    }
+                }
+            },
+            "post" : {
+                "tags": [
+                    "Guest"
+                ],
+                "summary" : "Create New Guest",
+                "security" : [
+                    {
+                        "bearerAuth" : []
+                    }
+                ],
+                "requestBody" : {
+                    "content" : {
+                        "application/json" : {
+                            "schema" : {
+                                "type" : "object",
+                                "properties" : {
+                                    "firstName" : {
+                                        "type" : "string"
+                                    },
+                                    "lastName" : {
+                                        "type" : "string"
+                                    },
+                                    "location" : {
+                                        "type" : "string"
+                                    },
+                                    "email" : {
+                                        "type" : "string"
+                                    }
+                                },
+                                "required" : [
+                                    "firstName",
+                                    "lastName",
+                                    "location",
+                                    "email"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200" : {
+                        "description" : "Guest fetched successfully",
+                        "content" : {
+                            "application/json" : {
+                                "schema" : {
+                                    "type" : "object",
+                                    "properties" : {
+                                        "status" : {
+                                            "type" : "boolean"
+                                        },
+                                        "message" : {
+                                            "type" : "string"
+                                        },
+                                        "data" : {
+                                            "type" : "object",
+                                            "properties" : {
+                                                "id" : {
+                                                    "type" : "integer"
+                                                },
+                                                "uniqId" : {
+                                                    "type" : "string"
+                                                },
+                                                "firstName" : {
+                                                    "type" : "string"
+                                                },
+                                                "lastName" : {
+                                                    "type" : "string"
+                                                },
+                                                "location" : {
+                                                    "type" : "string"
+                                                },
+                                                "email" : {
+                                                    "type" : "string"
+                                                },
+                                                "createdAt" : {
+                                                    "type" : "string"
+                                                },
+                                                "updatedAt" : {
+                                                    "type" : "string"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401" : {
+                        "description" : "Unauthorized"
+                    },
+                    "500" : {
+                        "description" : "Internal server error"
+                    }
+                }
+            }
+        },
+        "/api/v1/guest/{id}" : {
+            "delete" : {
+                "tags" : [
+                    "Guest"
+                ],
+                "summary" : "Delete Guest",
+                "security" : [
+                    {
+                        "bearerAuth" : []
+                    }
+                ],
+                "parameters" : [
+                    {
+                        "name" : "id",
+                        "in" : "query",
+                        "schema" : {
+                            "type" : "integer"
+                        },
+                        "required" : true
+                    }
+                ],
+                "responses" : {
+                    "200" : {
+                        "description" : "Guest deleted successfully",
+                        "content" : {
+                            "application/json" : {
+                                "schema" : {
+                                    "type" : "object",
+                                    "properties" : {
+                                        "status" : {
+                                            "type" : "boolean"
+                                        },
+                                        "message" : {
+                                            "type" : "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401" : {
+                        "description" : "Unauthorized"
+                    },
+                    "500" : {
+                        "description" : "Internal server error"
+                    }
+                }
+            }
+        },
+        "/api/v1/postcard" : {
+            "get" : {
+                "tags": [
+                    "Postcard"
+                ],
+                "summary" : "Get All Postcard",
+                "security" : [
+                    {
+                        "bearerAuth" : []
+                    }
+                ],
+                "responses": {
+                    "200" : {
+                        "description" : "Guest fetched successfully",
+                        "content" : {
+                            "application/json" : {
+                                "schema" : {
+                                    "type" : "object",
+                                    "properties" : {
+                                        "status" : {
+                                            "type" : "boolean"
+                                        },
+                                        "message" : {
+                                            "type" : "string"
+                                        },
+                                        "data" : {
+                                            "type" : "array",
+                                            "items" : {
+                                                "type" : "object",
+                                                "properties" : {
+                                                    "id" : {
+                                                        "type" : "integer"
+                                                    },
+                                                    "uniqId" : {
+                                                        "type" : "string"
+                                                    },
+                                                    "code" : {
+                                                        "type" : "string"
+                                                    },
+                                                    "guestId" : {
+                                                        "type" : "integer"
+                                                    },
+                                                    "metricTons" : {
+                                                        "type" : "integer"
+                                                    },
+                                                    "carbonFile" : {
+                                                        "type" : "string"
+                                                    },
+                                                    "currency" : {
+                                                        "type" : "string"
+                                                    },
+                                                    "amount" : {
+                                                        "type" : "integer"
+                                                    },
+                                                    "donationStatus" : {
+                                                        "type" : "string"
+                                                    },
+                                                    "createdAt" : {
+                                                        "type": "string"
+                                                    },
+                                                    "updatedAt" : {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401" : {
+                        "description" : "Unauthorized"
+                    },
+                    "500" : {
+                        "description" : "Internal server error"
+                    }
+                }
+            },
+            "post" : {
+                "tags": [
+                    "Postcard"
+                ],
+                "summary" : "Create New Postcard",
+                "security" : [
+                    {
+                        "bearerAuth" : []
+                    }
+                ],
+                "requestBody" : {
+                    "content" : {
+                        "application/json" : {
+                            "schema" : {
+                                "type" : "object",
+                                "properties" : {
+                                    "guestId" : {
+                                        "type" : "integer"
+                                    },
+                                    "code" : {
+                                        "type" : "string"
+                                    },
+                                    "metricTons" : {
+                                        "type" : "integer"
+                                    },
+                                    "carbonFile" : {
+                                        "type" : "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "required" : [
+                                    "guestId",
+                                    "metricTons",
+                                    "carbonFile",
+                                    "currency",
+                                    "amount",
+                                    "donationStatus"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200" : {
+                        "description": "Postcard created successfully",
+                        "content": {
+                            "application/json" : {
+                                "schema" : {
+                                    "type": "object",
+                                    "properties": {
+                                        "status" : {
+                                            "type" : "boolean"
+                                        },
+                                        "message" : {
+                                            "type" : "string"
+                                        },
+                                        "data" : {
+                                            "type" : "object",
+                                                "properties" : {
+                                                    "id" : {
+                                                        "type" : "integer"
+                                                    },
+                                                    "uniqId" : {
+                                                        "type" : "string"
+                                                    },
+                                                    "code" : {
+                                                        "type" : "string"
+                                                    },
+                                                    "guestId" : {
+                                                        "type" : "integer"
+                                                    },
+                                                    "metricTons" : {
+                                                        "type" : "integer"
+                                                    },
+                                                    "carbonFile" : {
+                                                        "type" : "string"
+                                                    },
+                                                    "createdAt" : {
+                                                        "type": "string"
+                                                    },
+                                                    "updatedAt" : {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/postcard/{id}/send-email" : {
+            "post" : {
+                "tags": [
+                    "Postcard"
+                ],
+                "summary" : "Send Postcard To Email",
+                "security" : [
+                    {
+                        "bearerAuth" : []
+                    }
+                ],
+                "parameters" : [
+                    {
+                        "name" : "id",
+                        "in" : "query",
+                        "schema" : {
+                            "type" : "integer"
+                        },
+                        "required" : true
+                    }
+                ],
+                "requestBody" : {
+                    "content" : {
+                        "application/json" : {
+                            "schema" : {
+                                "type" : "object",
+                                "properties" : {
+                                    "email" : {
+                                        "type" : "string"
+                                    }
+                                },
+                                "required" : [
+                                    "email"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses" : {
+                    "200" : {
+                        "description" : "Postcard sent successfully",
+                        "content" : {
+                            "application/json" : {
+                                "schema" : {
+                                    "type" : "object",
+                                    "properties" : {
+                                        "status" : {
+                                            "type" : "boolean"
+                                        },
+                                        "message" : {
+                                            "type" : "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401" : {
+                        "description" : "Unauthorized"
+                    },
+                    "500" : {
+                        "description" : "Internal server error"
+                    }
+                }
+            }
+        },
+        "/api/v1/donation" : {
+            "get" : {
+                "tags": [
+                    "Donation"
+                ],
+                "summary" : "Get All Donation",
+                "security" : [
+                    {
+                        "bearerAuth" : []
+                    }
+                ],
+                "responses": {
+                    "200" : {
+                        "description" : "Donation fetched successfully",
+                        "content" : {
+                            "application/json" : {
+                                "schema" : {
+                                    "type" : "object",
+                                    "properties" : {
+                                        "status" : {
+                                            "type" : "boolean"
+                                        },
+                                        "message" : {
+                                            "type" : "string"
+                                        },
+                                        "data" : {
+                                            "type" : "array",
+                                            "items" : {
+                                                "type" : "object",
+                                                "properties" : {
+                                                    "id" : {
+                                                        "type" : "integer"
+                                                    },
+                                                    "uniqId" : {
+                                                        "type" : "string"
+                                                    },
+                                                    "orderId" : {
+                                                        "type" : "string"
+                                                    },
+                                                    "guestId" : {
+                                                        "type" : "integer"
+                                                    },
+                                                    "postcardId" : {
+                                                        "type" : "integer"
+                                                    },
+                                                    "amount" : {
+                                                        "type" : "string"
+                                                    },
+                                                    "status" : {
+                                                        "type" : "string"
+                                                    },
+                                                    "createdAt" : {
+                                                        "type": "string"
+                                                    },
+                                                    "updatedAt" : {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401" : {
+                        "description" : "Unauthorized"
+                    },
+                    "500" : {
+                        "description" : "Internal server error"
+                    }
+                }
+            },
+            "post" : {
+                "tags": [
+                    "Donation"
+                ],
+                "summary" : "Create New Donation",
+                "security" : [
+                    {
+                        "bearerAuth" : []
+                    }
+                ],
+                "requestBody" : {
+                    "content" : {
+                        "application/json" : {
+                            "schema" : {
+                                "type" : "object",
+                                "properties" : {
+                                    "guestId" : {
+                                        "type" : "integer"
+                                    },
+                                    "postcardId" : {
+                                        "type" : "integer"
+                                    },
+                                    "amount" : {
+                                        "type" : "string"
+                                    }
+                                },
+                                "required" : [
+                                    "guestId",
+                                    "metricTons",
+                                    "carbonFile",
+                                    "currency",
+                                    "amount",
+                                    "donationStatus"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200" : {
+                        "description" : "Donation created successfully",
+                        "content" : {
+                            "application/json" : {
+                                "schema" : {
+                                    "type" : "object",
+                                    "properties" : {
+                                        "status" : {
+                                            "type" : "boolean"
+                                        },
+                                        "message" : {
+                                            "type" : "string"
+                                        },
+                                        "data" : {
+                                            "type" : "object",
+                                                "properties" : {
+                                                    "id" : {
+                                                        "type" : "integer"
+                                                    },
+                                                    "uniqId" : {
+                                                        "type" : "string"
+                                                    },
+                                                    "orderId" : {
+                                                        "type" : "string"
+                                                    },
+                                                    "guestId" : {
+                                                        "type" : "integer"
+                                                    },
+                                                    "postcardId" : {
+                                                        "type" : "integer"
+                                                    },
+                                                    "amount" : {
+                                                        "type" : "string"
+                                                    },
+                                                    "status" : {
+                                                        "type" : "string"
+                                                    },
+                                                    "createdAt" : {
+                                                        "type": "string"
+                                                    },
+                                                    "updatedAt" : {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401" : {
+                        "description" : "Unauthorized"
+                    },
+                    "500" : {
+                        "description" : "Internal server error"
+                    }
+                }
+            }
+        },
+        "/api/v1/transaction" : {
+            "get" : {
+                "tags": [
+                    "Transaction"
+                ],
+                "summary" : "Get All Transaction",
+                "security" : [
+                    {
+                        "bearerAuth" : []
+                    }
+                ],
+                "responses": {
+                    "200" : {
+                        "description" : "Transaction fetched successfully",
+                        "content" : {
+                            "application/json" : {
+                                "schema" : {
+                                    "type" : "object",
+                                    "properties" : {
+                                        "status" : {
+                                            "type" : "boolean"
+                                        },
+                                        "message" : {
+                                            "type" : "string"
+                                        },
+                                        "data" : {
+                                            "type" : "array",
+                                            "items" : {
+                                                "type" : "object",
+                                                "properties" : {
+                                                    "id" : {
+                                                        "type" : "integer"
+                                                    },
+                                                    "uniqId" : {
+                                                        "type" : "string"
+                                                    },
+                                                    "orderId" : {
+                                                        "type" : "string"
+                                                    },
+                                                    "guestName" : {
+                                                        "type" : "integer"
+                                                    },
+                                                    "amount" : {
+                                                        "type" : "string"
+                                                    },
+                                                    "createdAt" : {
+                                                        "type": "string"
+                                                    },
+                                                    "updatedAt" : {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401" : {
+                        "description" : "Unauthorized"
+                    },
+                    "500" : {
+                        "description" : "Internal server error"
+                    }
+                }
+            },
+            "post" : {
+                "tags": [
+                    "Transaction"
+                ],
+                "summary" : "Create New Transaction",
+                "security" : [
+                    {
+                        "bearerAuth" : []
+                    }
+                ],
+                "requestBody" : {
+                    "content" : {
+                        "application/json" : {
+                            "schema" : {
+                                "type" : "object",
+                                "properties" : {
+                                    "orderId" : {
+                                        "type" : "string"
+                                    },
+                                    "guestName" : {
+                                        "type" : "integer"
+                                    },
+                                    "amount" : {
+                                        "type" : "string"
+                                    }
+                                },
+                                "required" : [
+                                    "guestId",
+                                    "metricTons",
+                                    "carbonFile",
+                                    "currency",
+                                    "amount",
+                                    "donationStatus"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200" : {
+                        "description" : "Transaction fetched successfully",
+                        "content" : {
+                            "application/json" : {
+                                "schema" : {
+                                    "type" : "object",
+                                    "properties" : {
+                                        "status" : {
+                                            "type" : "boolean"
+                                        },
+                                        "message" : {
+                                            "type" : "string"
+                                        },
+                                        "data" : {
+                                            "type" : "object",
+                                                "properties" : {
+                                                    "id" : {
+                                                        "type" : "integer"
+                                                    },
+                                                    "uniqId" : {
+                                                        "type" : "string"
+                                                    },
+                                                    "orderId" : {
+                                                        "type" : "string"
+                                                    },
+                                                    "guestName" : {
+                                                        "type" : "integer"
+                                                    },
+                                                    "amount" : {
+                                                        "type" : "string"
+                                                    },
+                                                    "createdAt" : {
+                                                        "type": "string"
+                                                    },
+                                                    "updatedAt" : {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401" : {
+                        "description" : "Unauthorized"
+                    },
+                    "500" : {
+                        "description" : "Internal server error"
+                    }
+                }
+            }
+        }
+    }
+}
