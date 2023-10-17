@@ -10,6 +10,11 @@ use Illuminate\Support\Facades\Validator;
 
 class GuestController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('jwt.verify');
+    }
+
     /**
      * Display a listing of the resource.
      */
