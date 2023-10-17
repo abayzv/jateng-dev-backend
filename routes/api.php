@@ -27,6 +27,8 @@ Route::prefix('v1')->group(function () {
     Route::post('register', [AuthController::class, 'register']);
     Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:api');
     Route::post('refresh-token', [AuthController::class, 'refresh'])->middleware('auth:api');
+    Route::post('forgot-password', [AuthController::class, 'forgotPassword']);
+    Route::post('reset-password', [AuthController::class, 'resetPassword']);
 
     // Guest Routes
     Route::get('guests', [GuestController::class, 'index']);
