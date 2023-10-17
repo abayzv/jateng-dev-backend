@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\GuestController;
+use App\Http\Controllers\API\PostcardTemplateController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +29,12 @@ Route::prefix('v1')->group(function () {
     Route::get('guests', [GuestController::class, 'index']);
     Route::post('guests', [GuestController::class, 'store']);
     Route::delete('guests/{id}', [GuestController::class, 'destroy']);
+
+    // Postcard Template Routes
+    Route::get('postcard-templates', [PostcardTemplateController::class, 'index']);
+    Route::post('postcard-templates', [PostcardTemplateController::class, 'store']);
+    Route::put('postcard-templates/{id}', [PostcardTemplateController::class, 'update']);
+    Route::delete('postcard-templates/{id}', [PostcardTemplateController::class, 'destroy']);
 });
 
 // Test Route

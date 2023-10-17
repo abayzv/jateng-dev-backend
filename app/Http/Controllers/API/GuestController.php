@@ -20,7 +20,11 @@ class GuestController extends Controller
      */
     public function index()
     {
-        return GuestResource::collection(Guest::all());
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Guests retrieved successfully',
+            'data' => GuestResource::collection(Guest::all()),
+        ]);
     }
 
     /**
@@ -48,7 +52,11 @@ class GuestController extends Controller
 
         $guest = Guest::create($data);
 
-        return new GuestResource($guest);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Guest created successfully',
+            'data' => new GuestResource($guest),
+        ]);
     }
 
     /**
