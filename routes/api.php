@@ -22,3 +22,10 @@ Route::prefix('v1')->group(function () {
     Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:api');
     Route::post('refresh-token', [AuthController::class, 'refresh'])->middleware('auth:api');
 });
+
+// Test Route
+Route::get('test', function () {
+    return response()->json([
+        'message' => generateUuid()
+    ]);
+});
