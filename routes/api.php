@@ -1,8 +1,9 @@
 <?php
 
-use App\Http\Controllers\API\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\GuestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,11 +17,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('v1')->group(function () {
+    // Auth Routes
     Route::post('admin/login', [AuthController::class, 'login']);
     Route::get('me', [AuthController::class, 'me'])->middleware('auth:api');
     Route::post('register', [AuthController::class, 'register']);
     Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:api');
     Route::post('refresh-token', [AuthController::class, 'refresh'])->middleware('auth:api');
+
+    // Guest Routes
+    Route::get('guests', [GuestController::class, 'index']);
 });
 
 // Test Route

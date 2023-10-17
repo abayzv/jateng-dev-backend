@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Role;
+use App\Models\Guest;
 
 class DatabaseSeeder extends Seeder
 {
@@ -22,6 +23,13 @@ class DatabaseSeeder extends Seeder
             'name' => 'admin',
             'email' => 'admin@admin.com',
             'password' => bcrypt('P@ssw0rd'),
+        ]);
+
+        Guest::create([
+            'first_name' => 'John',
+            'last_name' => 'Doe',
+            'location' => 'New York',
+            'email' => 'jhondoe@gmail.com',
         ]);
     }
 }
