@@ -104,32 +104,57 @@ class AuthController extends Controller
 
     public function me()
     {
-        $user = Auth::user();
+        try {
+            $user = Auth::user();
 
-        return response()->json([
-            "status" => true,
-            'message' => 'Success',
-            'data' => $user
-        ]);
+            return response()->json([
+                "status" => true,
+                'message' => 'Success',
+                'data' => $user
+            ]);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json([
+                "status" => false,
+                "message" => 'Failed'
+            ], 500);
+        }
     }
 
     public function logout()
     {
-        Auth::logout();
-        return response()->json([
-            "status" => true,
-            'message' => 'Successfully logged out',
-        ]);
+        try {
+            Auth::logout();
+            return response()->json([
+                "status" => true,
+                'message' => 'Successfully logged out',
+            ]);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json([
+                "status" => false,
+                "message" => 'Failed'
+            ], 500);
+        }
     }
 
     public function refresh()
     {
-        return response()->json([
-            "status" => true,
-            "message" => "Refresh Token Success",
-            "data" => [
-                'access_token' => Auth::refresh(),
-            ]
-        ]);
+        try {
+            $token = Auth::refresh();
+            return response()->json([
+                "status" => true,
+                "message" => "Refresh Token Success",
+                "data" => [
+                    'access_token' => $token,
+                ]
+            ]);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json([
+                "status" => false,
+                "message" => 'Refresh Token Failed'
+            ], 500);
+        }
     }
 }
