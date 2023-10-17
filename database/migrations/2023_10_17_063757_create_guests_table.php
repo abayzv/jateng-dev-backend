@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('guests', function (Blueprint $table) {
             $table->id();
-            $table->string('uniq_id')->unique()->default(generateUuid());
+            $table->string('uniq_id')->unique();
             $table->string('first_name');
             $table->string('last_name');
             $table->string('location');

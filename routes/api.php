@@ -26,6 +26,8 @@ Route::prefix('v1')->group(function () {
 
     // Guest Routes
     Route::get('guests', [GuestController::class, 'index']);
+    Route::post('guests', [GuestController::class, 'store']);
+    Route::delete('guests/{id}', [GuestController::class, 'destroy']);
 });
 
 // Test Route

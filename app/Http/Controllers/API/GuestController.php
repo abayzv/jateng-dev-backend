@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Resources\GuestResource;
 use App\Http\Controllers\Controller;
 use App\Models\Guest;
+use Illuminate\Support\Facades\Validator;
 
 class GuestController extends Controller
 {
@@ -22,7 +23,27 @@ class GuestController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'first_name' => ['required'],
+            'last_name' => ['required'],
+            'location' => ['required'],
+            'email' => ['email'],
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation Error',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $data = $request->only(['first_name', 'last_name', 'location', 'email']);
+        $data['uniq_id'] = generateUuid();
+
+        $guest = Guest::create($data);
+
+        return new GuestResource($guest);
     }
 
     /**
@@ -46,6 +67,21 @@ class GuestController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        // delete guest
+        $guest = Guest::where('id', $id)->first();
+
+        if (!$guest) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Guest not found',
+            ], 404);
+        }
+
+        $guest->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Guest deleted successfully',
+        ]);
     }
 }
