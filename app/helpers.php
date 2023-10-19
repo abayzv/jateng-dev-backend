@@ -11,7 +11,6 @@ function generateUuid()
 
 function uploadImage($image, $path)
 {
-    Log::info($image);
     try {
         $imageName = time() . '.' . $image->extension();
         $url = Storage::putFileAs('public/images/' . $path, $image, $imageName);
