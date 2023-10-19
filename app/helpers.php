@@ -33,3 +33,14 @@ function generateRandomToken()
 {
     return bin2hex(random_bytes(32));
 }
+
+function uniqCode($existingCodes)
+{
+    $code = rand(100000, 999999);
+    // if code not in existingCodes, return code
+    if (!in_array($code, $existingCodes)) {
+        return $code;
+    } else {
+        uniqCode($existingCodes);
+    }
+}
