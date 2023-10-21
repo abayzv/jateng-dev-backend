@@ -3,12 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
-use App\Http\Controllers\API\GuestController;
-use App\Http\Controllers\API\PostcardTemplateController;
-use App\Http\Controllers\API\PostcardController;
-use App\Mail\SendEmail;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
+use App\Classes\DatabaseClass;
+use Illuminate\Support\Facades\Artisan;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,4 +25,32 @@ Route::prefix('v1')->group(function () {
     Route::post('refresh-token', [AuthController::class, 'refresh'])->middleware('auth:api');
     Route::post('forgot-password', [AuthController::class, 'forgotPassword']);
     Route::post('reset-password', [AuthController::class, 'resetPassword']);
+});
+
+// create test route
+Route::get('test', function () {
+    $fields = [
+        [
+            "name" => "name",
+            "type" => "string",
+            "length" => 125,
+        ],
+        [
+            "name" => "file",
+            "type" => "string",
+        ]
+    ];
+
+    $schema = new DatabaseClass('categories');
+
+    foreach ($fields as $field) {
+        $schema->addField($field['name'], $field['type'], $field['length'] ?? null, $field['nullable'] ?? null, $field['default'] ?? null, $field['foreign'] ?? null);
+    }
+
+    $schema->createMigration();
+    Artisan::call('migrate');
+
+    return response()->json([
+        'message' => 'success',
+    ]);
 });
