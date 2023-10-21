@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Artisan;
 use App\Models\TableSchema;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 /*
 |--------------------------------------------------------------------------
@@ -113,6 +114,17 @@ Route::post('/v2/{name}', function () {
     $model = ucfirst($name);
     $model = "App\\Models\\{$model}";
     $model = new $model;
+
+    $schema = TableSchema::where('table_name', $name)->get();
+    $validator = createValidator($schema);
+
+    if ($validator->fails()) {
+        return response()->json([
+            'message' => 'failed',
+            'errors' => $validator->errors(),
+        ]);
+    }
+
     $model = $model->create(request()->all());
     return response()->json([
         'message' => 'success',

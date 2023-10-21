@@ -18,4 +18,9 @@ class TableSchema extends Model
         'default',
         'foreign',
     ];
+
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
 }
