@@ -2,10 +2,9 @@
 
 namespace Database\Seeders;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
-use App\Models\Guest;
+use App\Models\User;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,12 +13,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
         Role::create([
             'name' => 'admin'
         ]);
 
-        $user = \App\Models\User::factory()->create([
+        $user = User::factory()->create([
             'uniq_id' => generateUuid(),
             'name' => 'admin',
             'email' => 'admin@admin.com',
@@ -27,13 +25,5 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $user->assignRole('admin');
-
-        Guest::create([
-            'uniq_id' => generateUuid(),
-            'first_name' => 'John',
-            'last_name' => 'Doe',
-            'location' => 'New York',
-            'email' => 'jhondoe@gmail.com',
-        ]);
     }
 }
