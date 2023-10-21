@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('table_schemas', function (Blueprint $table) {
             $table->id();
+            $table->string('table_name');
             $table->string('name');
             $table->string('type');
             $table->integer('length')->nullable();

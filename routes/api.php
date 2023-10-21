@@ -46,6 +46,14 @@ Route::get('test', function () {
         ]
     ];
 
+    $isExist = TableSchema::where('table_name', 'categories')->get();
+
+    if ($isExist->count() > 0) {
+        return response()->json([
+            'message' => 'Table already exist',
+        ]);
+    }
+
     try {
         $schema = new DatabaseClass('categories');
         DB::beginTransaction();
@@ -53,6 +61,7 @@ Route::get('test', function () {
             $schema->addField($field['name'], $field['type'], $field['length'] ?? null, $field['nullable'] ?? null, $field['default'] ?? null, $field['foreign'] ?? null);
 
             TableSchema::create([
+                'table_name' => $schema->name,
                 'name' => $field['name'],
                 'type' => $field['input'],
                 'length' => $field['length'] ?? null,
@@ -78,11 +87,12 @@ Route::get('test', function () {
     }
 });
 
-Route::get('/schema', function () {
-    $tables = TableSchema::all();
+Route::get('/schema/{name}', function () {
+    $name = request()->route('name');
+    $table = TableSchema::where('table_name', $name)->get();
     return response()->json([
         'message' => 'success',
-        'data' => $tables,
+        'data' => $table,
     ]);
 });
 
