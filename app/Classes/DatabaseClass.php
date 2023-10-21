@@ -143,4 +143,27 @@ class DatabaseClass extends TableClass
         fwrite($migrationFile, $migration);
         fclose($migrationFile);
     }
+
+    public function createModel()
+    {
+        // generate model file like laravel
+        $model = '<?php' . PHP_EOL . PHP_EOL;
+        $model .= 'namespace App\Models;' . PHP_EOL . PHP_EOL;
+        $model .= 'use Illuminate\Database\Eloquent\Factories\HasFactory;' . PHP_EOL;
+        $model .= 'use Illuminate\Database\Eloquent\Model;' . PHP_EOL . PHP_EOL;
+        $model .= 'class ' . ucfirst($this->name) . ' extends Model' . PHP_EOL;
+        $model .= '{' . PHP_EOL;
+        $model .= '    use HasFactory;' . PHP_EOL . PHP_EOL;
+        $model .= '    protected $fillable = [' . PHP_EOL;
+        foreach ($this->fields as $field) {
+            $model .= '        \'' . $field->name . '\',' . PHP_EOL;
+        }
+        $model .= '    ];' . PHP_EOL;
+        $model .= '}' . PHP_EOL;
+
+        // create file model in app/Models
+        $modelFile = fopen(base_path('app/Models/' . ucfirst($this->name) . '.php'), 'w');
+        fwrite($modelFile, $model);
+        fclose($modelFile);
+    }
 }
