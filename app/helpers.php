@@ -50,30 +50,28 @@ function createValidator($schema)
 {
     $rules = [];
     foreach ($schema as $field) {
-        switch ($field['input']) {
+        switch ($field['type']) {
             case 'text':
+                $rules[$field['name']] = 'string';
                 if (!isset($field['nullable'])) {
-                    $rules[$field['name']] = 'required';
+                    $rules[$field['name']] .= '';
+                } else {
+                    $rules[$field['name']] .= '|required';
                 }
                 if (isset($field['length'])) {
                     $rules[$field['name']] .= '|max:' . $field['length'];
                 }
-                $rules[$field['name']] .= '|string';
                 break;
             case 'file':
+                $rules[$field['name']] = 'file';
                 if (!isset($field['nullable'])) {
-                    $rules[$field['name']] = 'required';
+                    $rules[$field['name']] .= '';
+                } else {
+                    $rules[$field['name']] .= '|required';
                 }
-                $rules[$field['name']] .= '|file';
                 break;
         }
     }
 
-    $fields = [];
-    foreach ($rules as $key => $value) {
-        $fields[] = $key;
-    }
-    $request = request()->only($fields);
-
-    return Validator::make($request, $rules);
+    return $rules;
 }

@@ -66,7 +66,7 @@ Route::get('test', function () {
                 'name' => $field['name'],
                 'type' => $field['input'],
                 'length' => $field['length'] ?? null,
-                'nullable' => $field['nullable'] ?? null,
+                'nullable' => $field['nullable'] ?? false,
                 'default' => $field['default'] ?? null,
                 'foreign' => $field['foreign'] ?? null,
             ]);
@@ -116,18 +116,34 @@ Route::post('/v2/{name}', function () {
     $model = new $model;
 
     $schema = TableSchema::where('table_name', $name)->get();
-    $validator = createValidator($schema);
+    $rules = createValidator($schema);
+    $validator = Validator::make(request()->all(), $rules);
 
     if ($validator->fails()) {
         return response()->json([
-            'message' => 'failed',
-            'errors' => $validator->errors(),
-        ]);
+            'status' => false,
+            'message' => 'Validation failed',
+            'errors' => $validator->errors()
+        ], 422);
     }
 
-    $model = $model->create(request()->all());
+    $onlyRequest = [];
+    foreach ($schema as $field) {
+        $onlyRequest[] = $field->name;
+    }
+
+    $data = request()->only($onlyRequest);
+
+    // if rules have file type
+    foreach ($rules as $key => $rule) {
+        if (strpos($rule, 'file') !== false) {
+            $url = uploadImage(request()->file($key), $name);
+            $data[$key] = $url;
+        }
+    }
+
     return response()->json([
         'message' => 'success',
-        'data' => $model,
+        'data' => $model->create($data),
     ]);
 });
