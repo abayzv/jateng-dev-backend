@@ -45,11 +45,11 @@ class CrudController extends Controller
             'fields.*.default' => 'nullable|string',
             'fields.*.foreign' => 'nullable|string',
             'visibility' => 'nullable|array',
-            'visibility.index' => 'required_with:visibility|array',
-            'visibility.store' => 'required_with:visibility|array',
-            'visibility.show' => 'required_with:visibility|array',
-            'visibility.update' => 'required_with:visibility|array',
-            'visibility.destroy' => 'required_with:visibility|array',
+            'visibility.index' => 'required_with:visibility|string',
+            'visibility.store' => 'required_with:visibility|string',
+            'visibility.show' => 'required_with:visibility|string',
+            'visibility.update' => 'required_with:visibility|string',
+            'visibility.destroy' => 'required_with:visibility|string',
         ]);
 
         if ($validator->fails()) {
@@ -148,11 +148,18 @@ class CrudController extends Controller
     {
         try {
             $table = TableSchema::where('table_name', $name)->get();
+
             if ($table->count() == 0) {
                 return response()->json([
                     'message' => 'Table not found',
                 ]);
             }
+
+            DB::beginTransaction();
+            $table->each->delete();
+            $visibility = CrudVisibility::where('name', $name)->get();
+            $visibility->each->delete();
+            DB::commit();
 
             $migration = database_path("migrations/*_create_{$name}_table.php");
             $migration = glob($migration);
@@ -176,11 +183,11 @@ class CrudController extends Controller
                 unlink($migration[0]);
             }
 
-            $table->each->delete();
             return response()->json([
                 'message' => 'success',
             ]);
         } catch (\Throwable $th) {
+            DB::rollBack();
             Log::error($th->getMessage());
             return response()->json([
                 'message' => 'failed',
