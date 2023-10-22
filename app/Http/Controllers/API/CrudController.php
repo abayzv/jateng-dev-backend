@@ -87,11 +87,73 @@ class CrudController extends Controller
      */
     public  function schema(string $name)
     {
-        $table = TableSchema::where('table_name', $name)->get();
-        return response()->json([
-            'message' => 'success',
-            'data' => $table,
-        ]);
+        try {
+            $table = TableSchema::where('table_name', $name)->get();
+
+            if ($table->count() == 0) {
+                return response()->json([
+                    'message' => 'Table not found',
+                ]);
+            }
+
+            return response()->json([
+                'message' => 'success',
+                'data' => $table,
+            ]);
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+            return response()->json([
+                'message' => 'failed',
+            ]);
+        }
+    }
+
+    /**
+     * Delete Table Schema
+     */
+
+    public function deleteSchema(string $name)
+    {
+        try {
+            $table = TableSchema::where('table_name', $name)->get();
+            if ($table->count() == 0) {
+                return response()->json([
+                    'message' => 'Table not found',
+                ]);
+            }
+
+            $migration = database_path("migrations/*_create_{$name}_table.php");
+            $migration = glob($migration);
+            if (count($migration) > 0) {
+                unlink($migration[0]);
+            }
+
+            $model = app_path("Models/{$name}.php");
+            if (file_exists($model)) {
+                unlink($model);
+            }
+
+            $database = new DatabaseClass($name);
+            $database->deleteMigration();
+
+            Artisan::call('migrate');
+
+            $migration = database_path("migrations/*_delete_{$name}_table.php");
+            $migration = glob($migration);
+            if (count($migration) > 0) {
+                unlink($migration[0]);
+            }
+
+            $table->each->delete();
+            return response()->json([
+                'message' => 'success',
+            ]);
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+            return response()->json([
+                'message' => 'failed',
+            ]);
+        }
     }
 
     /**
@@ -100,6 +162,15 @@ class CrudController extends Controller
     public function index(string $name)
     {
         try {
+            // check tableschema
+            $table = TableSchema::where('table_name', $name)->get();
+
+            if ($table->count() == 0) {
+                return response()->json([
+                    'message' => 'Crud not found',
+                ]);
+            }
+
             $model = ucfirst($name);
             $model = "App\\Models\\{$model}";
             $model = new $model;
@@ -122,11 +193,18 @@ class CrudController extends Controller
     public function store(string $name)
     {
         try {
+            $schema = TableSchema::where('table_name', $name)->get();
+
+            if ($schema->count() == 0) {
+                return response()->json([
+                    'message' => 'Crud not found',
+                ]);
+            }
+
             $model = ucfirst($name);
             $model = "App\\Models\\{$model}";
             $model = new $model;
 
-            $schema = TableSchema::where('table_name', $name)->get();
             $rules = createValidator($schema);
             $validator = Validator::make(request()->all(), $rules);
 

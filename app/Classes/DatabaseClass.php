@@ -144,6 +144,71 @@ class DatabaseClass extends TableClass
         fclose($migrationFile);
     }
 
+    public function deleteMigration()
+    {
+        // create migration file to delete the table
+        $migration = '<?php' . PHP_EOL . PHP_EOL;
+        $migration .= 'use Illuminate\Database\Migrations\Migration;' . PHP_EOL;
+        $migration .= 'use Illuminate\Database\Schema\Blueprint;' . PHP_EOL;
+        $migration .= 'use Illuminate\Support\Facades\Schema;' . PHP_EOL . PHP_EOL;
+
+        $migration .= 'class Delete' . ucfirst($this->name) . 'Table extends Migration' . PHP_EOL;
+        $migration .= '{' . PHP_EOL;
+        $migration .= '    /**' . PHP_EOL;
+        $migration .= '     * Run the migrations.' . PHP_EOL;
+        $migration .= '     *' . PHP_EOL;
+        $migration .= '     * @return void' . PHP_EOL;
+        $migration .= '     */' . PHP_EOL;
+        $migration .= '    public function up()' . PHP_EOL;
+        $migration .= '    {' . PHP_EOL;
+        $migration .= '        Schema::dropIfExists(\'' . $this->name . '\');' . PHP_EOL;
+        $migration .= '    }' . PHP_EOL . PHP_EOL;
+        $migration .= '    /**' . PHP_EOL;
+        $migration .= '     * Reverse the migrations.' . PHP_EOL;
+        $migration .= '     *' . PHP_EOL;
+        $migration .= '     * @return void' . PHP_EOL;
+        $migration .= '     */' . PHP_EOL;
+        $migration .= '    public function down()' . PHP_EOL;
+        $migration .= '    {' . PHP_EOL;
+        $migration .= '        Schema::create(\'' . $this->name . '\', function (Blueprint $table) {' . PHP_EOL;
+        foreach ($this->fields as $field) {
+            if ($field->name === 'id') {
+                if ($field->type === 'increments') {
+                    $migration .= '            $table->id();' . PHP_EOL;
+                } elseif ($field->type === 'bigIncrements') {
+                    $migration .= '            $table->bigIncrements(\'id\');' . PHP_EOL;
+                }
+            } else {
+                $migration .= '            $table->' . $field->type . '(\'' . $field->name . '\'';
+                if ($field->length) {
+                    $migration .= ', ' . $field->length . ')';
+                }
+                if (!$field->length) {
+                    $migration .= ')';
+                }
+                if ($field->nullable) {
+                    $migration .= '->nullable()';
+                }
+                if ($field->default) {
+                    $migration .= '->default(\'' . $field->default . '\')';
+                }
+                if ($field->foreign) {
+                    $migration .= '->unsigned()';
+                }
+                $migration .= ';' . PHP_EOL;
+            }
+        }
+        $migration .= '            $table->timestamps();' . PHP_EOL . PHP_EOL;
+        $migration .= '        });' . PHP_EOL;
+        $migration .= '    }' . PHP_EOL;
+        $migration .= '}' . PHP_EOL;
+
+        // create file migration in database/migrations
+        $migrationFile = fopen(base_path('database/migrations/' . date('Y_m_d_His') . '_delete_' . $this->name . '_table.php'), 'w');
+        fwrite($migrationFile, $migration);
+        fclose($migrationFile);
+    }
+
     public function createModel()
     {
         // generate model file like laravel
