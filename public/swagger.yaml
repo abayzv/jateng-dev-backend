@@ -1,0 +1,1534 @@
+openapi: 3.0.0
+info:
+  title: Web Carbon API
+  description: Web Carbon API
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+security:
+  - bearerAuth: []
+tags:
+  - name: Auth
+  - name: Guest
+  - name: Postcard Template
+  - name: Included File
+  - name: Postcard
+paths:
+  /api/v1/me:
+    get:
+      tags:
+        - Auth
+      summary: Get user details
+      parameters:
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '200':
+          description: OK
+          headers:
+            Host:
+              schema:
+                type: string
+                example: localhost:8000
+            Date:
+              schema:
+                type: string
+                example: Mon, 16 Oct 2023 14:38:25 GMT
+            Connection:
+              schema:
+                type: string
+                example: close
+            X-Powered-By:
+              schema:
+                type: number
+                example: PHP/8.1.10
+            Cache-Control:
+              schema:
+                type: string
+                example: no-cache, private
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+                example: '60'
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+                example: '59'
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: true
+                message: Success
+                data:
+                  id: 1
+                  role_id: 1
+                  name: admin
+                  email: admin@admin.com
+                  created_at: '2023-10-16T14:29:43.000000Z'
+                  updated_at: '2023-10-16T14:29:43.000000Z'
+        '401':
+          description: Unauthorized
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: ''
+        '500':
+          description: Internal Server Error
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: ''
+  /api/v1/register:
+    post:
+      tags:
+        - Auth
+      summary: Register a new user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                name: <string>
+                email: <string>
+                password: <string>
+                password_confirmation: <string>
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '200':
+          description: OK
+          headers:
+            Host:
+              schema:
+                type: string
+                example: localhost:8000
+            Date:
+              schema:
+                type: string
+                example: Mon, 16 Oct 2023 14:55:59 GMT
+            Connection:
+              schema:
+                type: string
+                example: close
+            X-Powered-By:
+              schema:
+                type: number
+                example: PHP/8.1.10
+            Cache-Control:
+              schema:
+                type: string
+                example: no-cache, private
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+                example: '60'
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+                example: '59'
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: true
+                message: User created successfully
+                data:
+                  name: Jhon Doe
+                  email: jhondoe@gmail.com
+                  updated_at: '2023-10-16T14:55:59.000000Z'
+                  created_at: '2023-10-16T14:55:59.000000Z'
+                  id: 3
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: ''
+        '500':
+          description: Internal Server Error
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: ''
+  /api/v1/admin/login:
+    post:
+      tags:
+        - Auth
+      summary: Login as admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                email: admin@admin.com
+                password: P@ssw0rd
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '200':
+          description: OK
+          headers:
+            Host:
+              schema:
+                type: string
+                example: localhost:8000
+            Date:
+              schema:
+                type: string
+                example: Mon, 16 Oct 2023 14:57:16 GMT
+            Connection:
+              schema:
+                type: string
+                example: close
+            X-Powered-By:
+              schema:
+                type: number
+                example: PHP/8.1.10
+            Cache-Control:
+              schema:
+                type: string
+                example: no-cache, private
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+                example: '60'
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+                example: '59'
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: true
+                message: Login Success
+                data:
+                  access_token: >-
+                    eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL3YxL2FkbWluL2xvZ2luIiwiaWF0IjoxNjk3NDY4MjM2LCJleHAiOjE2OTc0NzE4MzYsIm5iZiI6MTY5NzQ2ODIzNiwianRpIjoiOXVGMU9wbEdHUjRyQm5jayIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.sra-OeBun4GkL8mZux3RGfkHi5eWfojvPTPhXilOZ38
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: ''
+        '500':
+          description: Internal Server Error
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: ''
+  /api/v1/refresh-token:
+    post:
+      tags:
+        - Auth
+      summary: Refresh user token
+      requestBody:
+        content: {}
+      parameters:
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '200':
+          description: OK
+          headers:
+            Host:
+              schema:
+                type: string
+                example: localhost:8000
+            Date:
+              schema:
+                type: string
+                example: Mon, 16 Oct 2023 14:57:46 GMT
+            Connection:
+              schema:
+                type: string
+                example: close
+            X-Powered-By:
+              schema:
+                type: number
+                example: PHP/8.1.10
+            Cache-Control:
+              schema:
+                type: string
+                example: no-cache, private
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+                example: '60'
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+                example: '58'
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: true
+                message: Refresh Token Success
+                data:
+                  access_token: >-
+                    eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgwMDAvYXBpL3YxL3JlZnJlc2gtdG9rZW4iLCJpYXQiOjE2OTc0NjgyMzYsImV4cCI6MTY5NzQ3MTg2NiwibmJmIjoxNjk3NDY4MjY2LCJqdGkiOiJHVm9yNldFZm9lM01kQ3U2Iiwic3ViIjoiMSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.WOtuNfGjmdwklIeBsbeWag3EZyasxZ18C7Xiz8szNFY
+        '401':
+          description: Unauthorized
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: ''
+        '500':
+          description: Internal Server Error
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: ''
+  /api/v1/logout:
+    post:
+      tags:
+        - Auth
+      summary: Logout user
+      requestBody:
+        content: {}
+      parameters:
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '200':
+          description: OK
+          headers:
+            Host:
+              schema:
+                type: string
+                example: localhost:8000
+            Date:
+              schema:
+                type: string
+                example: Mon, 16 Oct 2023 14:58:03 GMT
+            Connection:
+              schema:
+                type: string
+                example: close
+            X-Powered-By:
+              schema:
+                type: number
+                example: PHP/8.1.10
+            Cache-Control:
+              schema:
+                type: string
+                example: no-cache, private
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+                example: '60'
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+                example: '57'
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: true
+                message: Successfully logged out
+        '401':
+          description: Unauthorized
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: ''
+        '500':
+          description: Internal Server Error
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: ''
+  /api/v1/forgot-password:
+    post:
+      tags:
+        - Auth
+      summary: Forgot password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                email: ''
+      responses:
+        '200':
+          description: OK
+          headers:
+            Host:
+              schema:
+                type: string
+                example: localhost:8000
+            Date:
+              schema:
+                type: string
+                example: Tue, 17 Oct 2023 23:17:48 GMT
+            Connection:
+              schema:
+                type: string
+                example: close
+            X-Powered-By:
+              schema:
+                type: number
+                example: PHP/8.1.10
+            Cache-Control:
+              schema:
+                type: string
+                example: no-cache, private
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+                example: '60'
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+                example: '58'
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: true
+                message: Email sent successfully
+  /api/v1/reset-password:
+    post:
+      tags:
+        - Auth
+      summary: Reset password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                password: string
+                password_confirmation: string
+      parameters:
+        - name: x-reset-password-token
+          in: header
+          schema:
+            type: string
+          example: string
+      responses:
+        '200':
+          description: OK
+          headers:
+            Host:
+              schema:
+                type: string
+                example: localhost:8000
+            Date:
+              schema:
+                type: string
+                example: Tue, 17 Oct 2023 23:27:55 GMT
+            Connection:
+              schema:
+                type: string
+                example: close
+            X-Powered-By:
+              schema:
+                type: number
+                example: PHP/8.1.10
+            Cache-Control:
+              schema:
+                type: string
+                example: no-cache, private
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+                example: '60'
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+                example: '59'
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: true
+                message: Password reset successfully
+  /api/v1/guests:
+    get:
+      tags:
+        - Guest
+      summary: Get all guest
+      responses:
+        '200':
+          description: OK
+          headers:
+            Host:
+              schema:
+                type: string
+                example: localhost:8000
+            Date:
+              schema:
+                type: string
+                example: Tue, 17 Oct 2023 12:27:39 GMT
+            Connection:
+              schema:
+                type: string
+                example: close
+            X-Powered-By:
+              schema:
+                type: number
+                example: PHP/8.1.10
+            Cache-Control:
+              schema:
+                type: string
+                example: no-cache, private
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+                example: '60'
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+                example: '59'
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: success
+                message: Guests retrieved successfully
+                data:
+                  - id: 1
+                    uniq_id: '1697526847000'
+                    first_name: John
+                    last_name: Doe
+                    location: New York
+                    email: jhondoe@gmail.com
+                    created_at: '2023-10-17T07:14:07.000000Z'
+                    updated_at: '2023-10-17T07:14:07.000000Z'
+                  - id: 3
+                    uniq_id: '1697527294000'
+                    first_name: Rani
+                    last_name: Doe
+                    location: Indonesia
+                    email: ranidoe@gmail.com
+                    created_at: '2023-10-17T07:21:34.000000Z'
+                    updated_at: '2023-10-17T07:21:34.000000Z'
+    post:
+      tags:
+        - Guest
+      summary: Create new guest
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                first_name: Aji
+                last_name: Bayu
+                location: Indonesia
+                email: ajipunk008@gmail.com
+      responses:
+        '201':
+          description: Created
+          headers:
+            Host:
+              schema:
+                type: string
+                example: localhost:8000
+            Date:
+              schema:
+                type: string
+                example: Tue, 17 Oct 2023 07:14:28 GMT
+            Connection:
+              schema:
+                type: string
+                example: close
+            X-Powered-By:
+              schema:
+                type: number
+                example: PHP/8.1.10
+            Cache-Control:
+              schema:
+                type: string
+                example: no-cache, private
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+                example: '60'
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+                example: '59'
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: success
+                message: Guest created successfully
+                data:
+                  first_name: Rani
+                  last_name: Doe
+                  location: Indonesia
+                  email: ranidoe@gmail.com
+                  uniq_id: 1697526868000
+                  updated_at: '2023-10-17T07:14:28.000000Z'
+                  created_at: '2023-10-17T07:14:28.000000Z'
+                  id: 2
+  /api/v1/guests/{id}:
+    delete:
+      tags:
+        - Guest
+      summary: Delete guest
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          headers:
+            Host:
+              schema:
+                type: string
+                example: localhost:8000
+            Date:
+              schema:
+                type: string
+                example: Tue, 17 Oct 2023 07:18:47 GMT
+            Connection:
+              schema:
+                type: string
+                example: close
+            X-Powered-By:
+              schema:
+                type: number
+                example: PHP/8.1.10
+            Cache-Control:
+              schema:
+                type: string
+                example: no-cache, private
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+                example: '60'
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+                example: '59'
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: success
+                message: Guest deleted successfully
+  /api/v1/postcard-templates:
+    post:
+      tags:
+        - Postcard Template
+      summary: Create  new postcard template
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: string
+                image:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: OK
+          headers:
+            Host:
+              schema:
+                type: string
+                example: localhost:8000
+            Date:
+              schema:
+                type: string
+                example: Tue, 17 Oct 2023 12:26:33 GMT
+            Connection:
+              schema:
+                type: string
+                example: close
+            X-Powered-By:
+              schema:
+                type: number
+                example: PHP/8.1.10
+            Cache-Control:
+              schema:
+                type: string
+                example: no-cache, private
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+                example: '60'
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+                example: '57'
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: success
+                message: Postcard Template created successfully
+                data:
+                  name: Test Image
+                  image_path: >-
+                    http://localhost:8000/storage/images/templates/1697545593.jpg
+                  uniq_id: 1697545593000
+                  updated_at: '2023-10-17T12:26:33.000000Z'
+                  created_at: '2023-10-17T12:26:33.000000Z'
+                  id: 4
+    get:
+      tags:
+        - Postcard Template
+      summary: Get all postcard templates
+      responses:
+        '200':
+          description: OK
+          headers:
+            Host:
+              schema:
+                type: string
+                example: localhost:8000
+            Date:
+              schema:
+                type: string
+                example: Tue, 17 Oct 2023 12:26:11 GMT
+            Connection:
+              schema:
+                type: string
+                example: close
+            X-Powered-By:
+              schema:
+                type: number
+                example: PHP/8.1.10
+            Cache-Control:
+              schema:
+                type: string
+                example: no-cache, private
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+                example: '60'
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+                example: '58'
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: success
+                message: Postcard Templates retrieved successfully
+                data:
+                  - id: 1
+                    uniq_id: '1697545178000'
+                    name: Test Image
+                    image_path: 1697545178.jpg
+                    created_at: '2023-10-17T12:19:38.000000Z'
+                    updated_at: '2023-10-17T12:19:38.000000Z'
+                  - id: 2
+                    uniq_id: '1697545228000'
+                    name: Test Image
+                    image_path: 1697545227.jpg
+                    created_at: '2023-10-17T12:20:28.000000Z'
+                    updated_at: '2023-10-17T12:20:28.000000Z'
+                  - id: 3
+                    uniq_id: '1697545324000'
+                    name: Test Image
+                    image_path: >-
+                      http://localhost:8000/storage/images/templates/1697545324.jpg
+                    created_at: '2023-10-17T12:22:04.000000Z'
+                    updated_at: '2023-10-17T12:22:04.000000Z'
+  /api/v1/postcard-templates/{id}:
+    post:
+      tags:
+        - Postcard Template
+      summary: Update postcard template
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: string
+                image:
+                  type: string
+                  format: binary
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: multipart/form-data
+        - name: _method
+          in: query
+          schema:
+            type: string
+          example: PUT
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          headers:
+            Host:
+              schema:
+                type: string
+                example: localhost:8000
+            Date:
+              schema:
+                type: string
+                example: Tue, 17 Oct 2023 12:30:43 GMT
+            Connection:
+              schema:
+                type: string
+                example: close
+            X-Powered-By:
+              schema:
+                type: number
+                example: PHP/8.1.10
+            Cache-Control:
+              schema:
+                type: string
+                example: no-cache, private
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+                example: '60'
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+                example: '58'
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: success
+                message: Postcard Template updated successfully
+                data:
+                  id: 1
+                  uniq_id: '1697545178000'
+                  name: Test edit images
+                  image_path: 1697545178.jpg
+                  created_at: '2023-10-17T12:19:38.000000Z'
+                  updated_at: '2023-10-17T12:30:43.000000Z'
+    delete:
+      tags:
+        - Postcard Template
+      summary: Delete postcard template
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          headers:
+            Host:
+              schema:
+                type: string
+                example: localhost:8000
+            Date:
+              schema:
+                type: string
+                example: Tue, 17 Oct 2023 12:32:10 GMT
+            Connection:
+              schema:
+                type: string
+                example: close
+            X-Powered-By:
+              schema:
+                type: number
+                example: PHP/8.1.10
+            Cache-Control:
+              schema:
+                type: string
+                example: no-cache, private
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+                example: '60'
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+                example: '59'
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: success
+                message: Postcard Template deleted successfully
+  /api/v1/included-files:
+    post:
+      tags:
+        - Included File
+      summary: Create  new included file
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: string
+                image:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: OK
+          headers:
+            Host:
+              schema:
+                type: string
+                example: localhost:8000
+            Date:
+              schema:
+                type: string
+                example: Sun, 22 Oct 2023 12:41:55 GMT
+            Connection:
+              schema:
+                type: string
+                example: close
+            X-Powered-By:
+              schema:
+                type: number
+                example: PHP/8.1.10
+            Cache-Control:
+              schema:
+                type: string
+                example: no-cache, private
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+                example: '60'
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+                example: '59'
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: success
+                message: Included file created successfully
+                data:
+                  id: 1
+                  uniq_id: 1697978515000
+                  name: test included files
+                  image_path: >-
+                    http://localhost:8000/storage/images/included_files/1697978515.jpg
+                  created_at: '2023-10-22T12:41:55.000000Z'
+                  updated_at: '2023-10-22T12:41:55.000000Z'
+    get:
+      tags:
+        - Included File
+      summary: Get all included files
+      responses:
+        '200':
+          description: OK
+          headers:
+            Host:
+              schema:
+                type: string
+                example: localhost:8000
+            Date:
+              schema:
+                type: string
+                example: Sun, 22 Oct 2023 12:42:11 GMT
+            Connection:
+              schema:
+                type: string
+                example: close
+            X-Powered-By:
+              schema:
+                type: number
+                example: PHP/8.1.10
+            Cache-Control:
+              schema:
+                type: string
+                example: no-cache, private
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+                example: '60'
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+                example: '58'
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: success
+                message: Included Files retrieved successfully
+                data:
+                  - id: 1
+                    uniq_id: '1697978515000'
+                    name: test included files
+                    image_path: >-
+                      http://localhost:8000/storage/images/included_files/1697978515.jpg
+                    created_at: '2023-10-22T12:41:55.000000Z'
+                    updated_at: '2023-10-22T12:41:55.000000Z'
+  /api/v1/included-files/{id}:
+    post:
+      tags:
+        - Included File
+      summary: Update included file
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: string
+                image:
+                  type: string
+                  format: binary
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: multipart/form-data
+        - name: _method
+          in: query
+          schema:
+            type: string
+          example: PUT
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          headers:
+            Host:
+              schema:
+                type: string
+                example: localhost:8000
+            Date:
+              schema:
+                type: string
+                example: Sun, 22 Oct 2023 12:42:35 GMT
+            Connection:
+              schema:
+                type: string
+                example: close
+            X-Powered-By:
+              schema:
+                type: number
+                example: PHP/8.1.10
+            Cache-Control:
+              schema:
+                type: string
+                example: no-cache, private
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+                example: '60'
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+                example: '56'
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: success
+                message: Included file updated successfully
+                data:
+                  id: 1
+                  uniq_id: '1697978515000'
+                  name: string
+                  image_path: >-
+                    http://localhost:8000/storage/images/included_files/1697978555.jpg
+                  created_at: '2023-10-22T12:41:55.000000Z'
+                  updated_at: '2023-10-22T12:42:35.000000Z'
+    delete:
+      tags:
+        - Included File
+      summary: Delete included file
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: OK
+          headers:
+            Host:
+              schema:
+                type: string
+                example: localhost:8000
+            Date:
+              schema:
+                type: string
+                example: Sun, 22 Oct 2023 12:42:50 GMT
+            Connection:
+              schema:
+                type: string
+                example: close
+            X-Powered-By:
+              schema:
+                type: number
+                example: PHP/8.1.10
+            Cache-Control:
+              schema:
+                type: string
+                example: no-cache, private
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+                example: '60'
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+                example: '55'
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: success
+                message: Included file deleted successfully
+  /api/v1/postcards:
+    get:
+      tags:
+        - Postcard
+      summary: Get all postcard
+      responses:
+        '200':
+          description: OK
+          headers:
+            Host:
+              schema:
+                type: string
+                example: localhost:8000
+            Date:
+              schema:
+                type: string
+                example: Thu, 19 Oct 2023 12:54:39 GMT
+            Connection:
+              schema:
+                type: string
+                example: close
+            X-Powered-By:
+              schema:
+                type: number
+                example: PHP/8.1.10
+            Cache-Control:
+              schema:
+                type: string
+                example: no-cache, private
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+                example: '60'
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+                example: '59'
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: success
+                message: Postcards retrieved successfully
+                data:
+                  - id: 1
+                    uniq_id: '1697719876000'
+                    code: '620796'
+                    guest_id: 1
+                    file_carbon_path: >-
+                      http://localhost:8000/storage/images/postcards/1697719876.jpg
+                    metric_tons: 1
+                    created_at: '2023-10-19T12:51:16.000000Z'
+                    updated_at: '2023-10-19T12:51:16.000000Z'
+                  - id: 2
+                    uniq_id: '1697719960000'
+                    code: '756983'
+                    guest_id: 1
+                    file_carbon_path: >-
+                      http://localhost:8000/storage/images/postcards/1697719960.jpg
+                    metric_tons: 1
+                    created_at: '2023-10-19T12:52:40.000000Z'
+                    updated_at: '2023-10-19T12:52:40.000000Z'
+                  - id: 3
+                    uniq_id: '1697719984000'
+                    code: '319297'
+                    guest_id: 1
+                    file_carbon_path: >-
+                      http://localhost:8000/storage/images/postcards/1697719984.jpg
+                    metric_tons: 1
+                    created_at: '2023-10-19T12:53:04.000000Z'
+                    updated_at: '2023-10-19T12:53:04.000000Z'
+    post:
+      tags:
+        - Postcard
+      summary: Create new postcard
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                guest_id:
+                  type: integer
+                  example: '5'
+                file_carbon:
+                  type: string
+                  format: binary
+                metric_tons:
+                  type: integer
+                  example: '2'
+      responses:
+        '200':
+          description: OK
+          headers:
+            Host:
+              schema:
+                type: string
+                example: localhost:8000
+            Date:
+              schema:
+                type: string
+                example: Thu, 19 Oct 2023 12:53:04 GMT
+            Connection:
+              schema:
+                type: string
+                example: close
+            X-Powered-By:
+              schema:
+                type: number
+                example: PHP/8.1.10
+            Cache-Control:
+              schema:
+                type: string
+                example: no-cache, private
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+                example: '60'
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+                example: '58'
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: success
+                message: Postcard created successfully
+                data:
+                  id: 3
+                  uniq_id: 1697719984000
+                  code: 319297
+                  guest_id: '1'
+                  file_carbon_path: >-
+                    http://localhost:8000/storage/images/postcards/1697719984.jpg
+                  metric_tons: '1'
+                  created_at: '2023-10-19T12:53:04.000000Z'
+                  updated_at: '2023-10-19T12:53:04.000000Z'
+  /api/v1/postcards/{uniq_id}/send-email:
+    post:
+      tags:
+        - Postcard
+      summary: Send email
+      requestBody:
+        content: {}
+      parameters:
+        - name: uniq_id
+          in: path
+          schema:
+            type: integer
+          required: true
+          example: '1697942479000'
+      responses:
+        '200':
+          description: OK
+          headers:
+            Host:
+              schema:
+                type: string
+                example: localhost:8000
+            Date:
+              schema:
+                type: string
+                example: Fri, 20 Oct 2023 13:33:15 GMT
+            Connection:
+              schema:
+                type: string
+                example: close
+            X-Powered-By:
+              schema:
+                type: number
+                example: PHP/8.1.10
+            Cache-Control:
+              schema:
+                type: string
+                example: no-cache, private
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+                example: '60'
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+                example: '59'
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                status: success
+                message: Postcard sent successfully
