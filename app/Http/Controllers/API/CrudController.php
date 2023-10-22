@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Classes\DatabaseClass;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\CrudVisibility;
 use App\Models\TableSchema;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
@@ -13,6 +14,20 @@ use Illuminate\Support\Facades\Validator;
 
 class CrudController extends Controller
 {
+    public function __construct()
+    {
+        $rules = ['generate', 'schema', 'deleteSchema'];
+        $params = request()->route()->parameters();
+        $visibility = CrudVisibility::where('name', $params['name'] ?? null)->get();
+        foreach ($visibility as $vis) {
+            if ($vis->visibility == 'public') {
+                $rules[] = $vis->action;
+            }
+        }
+
+        $this->middleware('jwt.verify')->except($rules);
+    }
+
     /**
      * Generate Table Schema
      */
@@ -29,6 +44,12 @@ class CrudController extends Controller
             'fields.*.nullable' => 'nullable|boolean',
             'fields.*.default' => 'nullable|string',
             'fields.*.foreign' => 'nullable|string',
+            'visibility' => 'nullable|array',
+            'visibility.index' => 'required_with:visibility|array',
+            'visibility.store' => 'required_with:visibility|array',
+            'visibility.show' => 'required_with:visibility|array',
+            'visibility.update' => 'required_with:visibility|array',
+            'visibility.destroy' => 'required_with:visibility|array',
         ]);
 
         if ($validator->fails()) {
@@ -40,6 +61,7 @@ class CrudController extends Controller
 
         $name = $request->name;
         $fields = $request->fields;
+        $visibility = $request->visibility;
 
         $isExist = TableSchema::where('table_name', $name)->get();
 
@@ -65,6 +87,16 @@ class CrudController extends Controller
                     'foreign' => $field['foreign'] ?? null,
                 ]);
             }
+
+            $action = ['index', 'store', 'show', 'update', 'destroy'];
+            foreach ($action as $act) {
+                CrudVisibility::create([
+                    'name' => $schema->name,
+                    'action' => $act,
+                    'visibility' => $visibility[$act] ?? 'public',
+                ]);
+            }
+
             DB::commit();
             $schema->createMigration();
             $schema->createModel();
@@ -231,12 +263,12 @@ class CrudController extends Controller
             }
 
             DB::beginTransaction();
-            $model->create($data);
+            $response = $model->create($data);
             DB::commit();
 
             return response()->json([
                 'message' => 'success',
-                'data' => $data,
+                'data' => $response,
             ]);
         } catch (\Throwable $th) {
             DB::rollBack();
