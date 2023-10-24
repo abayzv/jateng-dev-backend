@@ -16,7 +16,7 @@ class CrudController extends Controller
 {
     public function __construct()
     {
-        $rules = ['generate', 'schema', 'deleteSchema', 'list'];
+        $rules = ['generate', 'schema', 'deleteSchema', 'list', 'show'];
         $params = request()->route() ? request()->route()->parameters : [];
         $visibility = CrudVisibility::where('name', $params['name'] ?? null)->get();
         foreach ($visibility as $vis) {
@@ -304,6 +304,30 @@ class CrudController extends Controller
     {
         try {
             $table = TableSchema::all()->pluck('table_name');
+
+            return response()->json([
+                "status" => true,
+                'message' => 'success',
+                'data' => $table,
+            ]);
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+            return response()->json([
+                "status" => false,
+                'message' => 'failed',
+            ], 400);
+        }
+    }
+
+    /**
+     * Get Table Data
+     */
+    public function show(string $name)
+    {
+        try {
+            $table = TableSchema::all()->where('table_name', $name)
+                ->groupBy('table_name')
+                ->first();
 
             return response()->json([
                 "status" => true,

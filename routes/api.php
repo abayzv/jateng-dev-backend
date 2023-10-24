@@ -28,6 +28,7 @@ Route::prefix('v1/auth')->group(function () {
 
 Route::prefix('v1')->group(function () {
     Route::get('/crud', [CrudController::class, 'list']);
+    Route::get('/crud/{name}', [CrudController::class, 'show']);
     Route::post('/crud/generate', [CrudController::class, 'generate']);
     Route::get('/crud/schema/{name}', [CrudController::class, 'schema']);
     Route::delete('/crud/{name}', [CrudController::class, 'deleteSchema']);
