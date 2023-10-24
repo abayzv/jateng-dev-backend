@@ -72,10 +72,16 @@ class TableClass extends TableFieldClass
 class DatabaseClass extends TableClass
 {
     public $tables = [];
+    public $model_name;
 
     public function construct($name)
     {
         $this->setName($name);
+    }
+
+    public function setModelName($model_name)
+    {
+        $this->model_name = $model_name;
     }
 
     public function createMigration()
@@ -216,7 +222,7 @@ class DatabaseClass extends TableClass
         $model .= 'namespace App\Models;' . PHP_EOL . PHP_EOL;
         $model .= 'use Illuminate\Database\Eloquent\Factories\HasFactory;' . PHP_EOL;
         $model .= 'use Illuminate\Database\Eloquent\Model;' . PHP_EOL . PHP_EOL;
-        $model .= 'class ' . ucfirst($this->name) . ' extends Model' . PHP_EOL;
+        $model .= 'class ' . ucfirst($this->model_name) . ' extends Model' . PHP_EOL;
         $model .= '{' . PHP_EOL;
         $model .= '    use HasFactory;' . PHP_EOL . PHP_EOL;
         $model .= '    protected $fillable = [' . PHP_EOL;
@@ -227,7 +233,7 @@ class DatabaseClass extends TableClass
         $model .= '}' . PHP_EOL;
 
         // create file model in app/Models
-        $modelFile = fopen(base_path('app/Models/' . ucfirst($this->name) . '.php'), 'w');
+        $modelFile = fopen(base_path('app/Models/' . ucfirst($this->model_name) . '.php'), 'w');
         fwrite($modelFile, $model);
         fclose($modelFile);
     }

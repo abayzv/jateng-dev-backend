@@ -11,6 +11,7 @@ class TableSchema extends Model
 
     protected $fillable = [
         'table_name',
+        'model_name',
         'name',
         'type',
         'length',

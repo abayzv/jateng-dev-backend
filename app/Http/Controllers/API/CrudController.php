@@ -17,7 +17,7 @@ class CrudController extends Controller
     public function __construct()
     {
         $rules = ['generate', 'schema', 'deleteSchema'];
-        $params = request()->route()->parameters();
+        $params = request()->route() ? request()->route()->parameters : [];
         $visibility = CrudVisibility::where('name', $params['name'] ?? null)->get();
         foreach ($visibility as $vis) {
             if ($vis->visibility == 'public') {
@@ -36,6 +36,7 @@ class CrudController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
+            'model_name' => 'required|string',
             'fields' => 'required|array',
             'fields.*.name' => 'required|string',
             'fields.*.type' => 'required|string',
@@ -60,6 +61,7 @@ class CrudController extends Controller
         }
 
         $name = $request->name;
+        $model_name = $request->model_name;
         $fields = $request->fields;
         $visibility = $request->visibility;
 
@@ -73,12 +75,14 @@ class CrudController extends Controller
 
         try {
             $schema = new DatabaseClass($name);
+            $schema->setModelName($model_name);
             DB::beginTransaction();
             foreach ($fields as $field) {
                 $schema->addField($field['name'], $field['type'], $field['length'] ?? null, $field['nullable'] ?? null, $field['default'] ?? null, $field['foreign'] ?? null);
 
                 TableSchema::create([
                     'table_name' => $schema->name,
+                    'model_name' => $schema->model_name,
                     'name' => $field['name'],
                     'type' => $field['input'],
                     'length' => $field['length'] ?? null,
@@ -148,6 +152,7 @@ class CrudController extends Controller
     {
         try {
             $table = TableSchema::where('table_name', $name)->get();
+            $model_name = $table->first()->model_name;
 
             if ($table->count() == 0) {
                 return response()->json([
@@ -167,7 +172,7 @@ class CrudController extends Controller
                 unlink($migration[0]);
             }
 
-            $model = app_path("Models/{$name}.php");
+            $model = app_path("Models/{$model_name}.php");
             if (file_exists($model)) {
                 unlink($model);
             }
@@ -202,7 +207,7 @@ class CrudController extends Controller
     {
         try {
             // check tableschema
-            $table = TableSchema::where('table_name', $name)->get();
+            $table = TableSchema::where('table_name', $name)->first();
 
             if ($table->count() == 0) {
                 return response()->json([
@@ -210,7 +215,7 @@ class CrudController extends Controller
                 ]);
             }
 
-            $model = ucfirst($name);
+            $model = ucfirst($table->model_name);
             $model = "App\\Models\\{$model}";
             $model = new $model;
             $model = $model->all();
@@ -233,6 +238,7 @@ class CrudController extends Controller
     {
         try {
             $schema = TableSchema::where('table_name', $name)->get();
+            $model_name = $schema->first()->model_name;
 
             if ($schema->count() == 0) {
                 return response()->json([
@@ -240,7 +246,7 @@ class CrudController extends Controller
                 ]);
             }
 
-            $model = ucfirst($name);
+            $model = ucfirst($model_name);
             $model = "App\\Models\\{$model}";
             $model = new $model;
 
