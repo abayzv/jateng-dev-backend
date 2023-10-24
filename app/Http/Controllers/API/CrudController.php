@@ -16,7 +16,7 @@ class CrudController extends Controller
 {
     public function __construct()
     {
-        $rules = ['generate', 'schema', 'deleteSchema'];
+        $rules = ['generate', 'schema', 'deleteSchema', 'list'];
         $params = request()->route() ? request()->route()->parameters : [];
         $visibility = CrudVisibility::where('name', $params['name'] ?? null)->get();
         foreach ($visibility as $vis) {
@@ -157,7 +157,7 @@ class CrudController extends Controller
             if ($table->count() == 0) {
                 return response()->json([
                     'message' => 'Table not found',
-                ]);
+                ], 404);
             }
 
             DB::beginTransaction();
@@ -196,7 +196,7 @@ class CrudController extends Controller
             Log::error($th->getMessage());
             return response()->json([
                 'message' => 'failed',
-            ]);
+            ], 400);
         }
     }
 
@@ -212,7 +212,7 @@ class CrudController extends Controller
             if ($table->count() == 0) {
                 return response()->json([
                     'message' => 'Crud not found',
-                ]);
+                ], 404);
             }
 
             $model = ucfirst($table->model_name);
@@ -227,7 +227,7 @@ class CrudController extends Controller
             Log::error($th->getMessage());
             return response()->json([
                 'message' => 'failed',
-            ]);
+            ], 400);
         }
     }
 
@@ -294,6 +294,28 @@ class CrudController extends Controller
             return response()->json([
                 'message' => 'failed',
             ]);
+        }
+    }
+
+    /**
+     * Get Crud List
+     */
+    public function list()
+    {
+        try {
+            $table = TableSchema::all()->pluck('table_name');
+
+            return response()->json([
+                "status" => true,
+                'message' => 'success',
+                'data' => $table,
+            ]);
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+            return response()->json([
+                "status" => false,
+                'message' => 'failed',
+            ], 400);
         }
     }
 }
