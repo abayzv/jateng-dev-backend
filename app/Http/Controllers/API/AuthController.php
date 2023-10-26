@@ -86,7 +86,6 @@ class AuthController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
-                'uniq_id' => generateUuid(),
             ]);
             $user->assignRole('admin');
             DB::commit();

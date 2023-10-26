@@ -18,7 +18,6 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $user = User::factory()->create([
-            'uniq_id' => generateUuid(),
             'name' => 'admin',
             'email' => 'admin@admin.com',
             'password' => bcrypt('P@ssw0rd'),
