@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('image');
             $table->foreignId('category_id')->constrained();
             $table->foreignId('user_id')->constrained();
-            $table->foreignId('brand_id')->constrained();
+            // $table->foreignId('brand_id')->constrained();
             $table->timestamps();
         });
     }
