@@ -15,12 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->decimal('price');
-            $table->integer('quantity');
             $table->string('description');
-            $table->string('image');
             $table->foreignId('category_id')->constrained();
             $table->foreignId('user_id')->constrained();
-            // $table->foreignId('brand_id')->constrained();
             $table->timestamps();
         });
     }

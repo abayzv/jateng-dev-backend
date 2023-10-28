@@ -4,9 +4,15 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ProductResource\Pages;
 use App\Filament\Resources\ProductResource\RelationManagers;
+use App\Models\Brand;
 use App\Models\Product;
 use Filament\Forms;
+use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -22,56 +28,77 @@ class ProductResource extends Resource
 {
     protected static ?string $model = Product::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-archive-box';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                TextInput::make('name')
-                    ->autofocus()
-                    ->required()
-                    ->unique()
-                    ->placeholder(__('Name'))
-                    ->maxLength(255),
+                Section::make('Details')
+                    ->description('Add product details')
+                    ->aside()
+                    ->collapsible()
+                    ->schema([
+                        TextInput::make('name')
+                            ->autofocus()
+                            ->required()
+                            ->unique()
+                            ->placeholder(__('Name'))
+                            ->maxLength(255),
 
-                TextInput::make('price')
-                    ->required()
-                    ->maxLength(255)
-                    ->placeholder(__('Price')),
-
-
-                TextInput::make('quantity')
-                    ->required()
-                    ->maxLength(255)
-                    ->placeholder(__('Quantity')),
-
-
-                TextInput::make('description')
-                    ->required()
-                    ->maxLength(255)
-                    ->placeholder(__('Description')),
-
-                FileUpload::make('image')
-                    ->image()
-                    ->imageEditor()
-                    ->imageEditorAspectRatios([
-                        null,
-                        '16:9',
-                        '4:3',
-                        '1:1',
+                        RichEditor::make('description')
+                            ->required()
+                            ->maxLength(255)
+                            ->placeholder(__('Description')),
                     ]),
 
-                Select::make('category_id')
-                    ->relationship('category', 'name')
-                    ->searchable()
-                    ->preload()
-                    ->required()
-                    ->placeholder(__('Category')),
+                Section::make('Information')
+                    ->description('Add product information')
+                    ->aside()
+                    ->collapsible()
+                    ->schema([
+                        TextInput::make('price')
+                            ->required()
+                            ->maxLength(255)
+                            ->placeholder(__('Price')),
 
-                Select::make('user_id')
-                    ->relationship('author', 'name')
-                    ->placeholder(__('User')),
+                        Select::make('category_id')
+                            ->relationship('category', 'name')
+                            ->searchable()
+                            ->preload()
+                            ->required()
+                            ->placeholder(__('Category')),
+
+                        Select::make('brand_id')
+                            ->relationship('brand', 'name')
+                            ->searchable()
+                            ->preload()
+                            ->required()
+                            ->placeholder(__('Category')),
+
+                        Select::make('user_id')
+                            ->relationship('author', 'name')
+                            ->placeholder(__('User')),
+                    ]),
+
+                Section::make('Galleries')
+                    ->description('Add product galleries')
+                    ->aside()
+                    ->collapsible()
+                    ->schema([
+                        FileUpload::make('images')
+                            ->panelLayout('grid')
+                            ->imagePreviewHeight('150')
+                            ->multiple()
+                            ->image()
+                            ->imageEditor()
+                            ->imageEditorAspectRatios([
+                                null,
+                                '16:9',
+                                '4:3',
+                                '1:1',
+                            ]),
+                    ])
 
                 // Forms\Components\BelongsToSelect::make('brand_id')
                 //     ->relationship('brand', 'name')
@@ -83,18 +110,21 @@ class ProductResource extends Resource
     {
         return $table
             ->columns([
-                ImageColumn::make('image'),
                 TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
-
+                ImageColumn::make('brand.image')
+                    ->circular()
+                    ->extraImgAttributes(fn (Product $record): array => [
+                        'title' => $record->brand->name,
+                    ]),
+                TextColumn::make('category.name')
+                    ->sortable(),
                 TextColumn::make('price')
                     ->prefix('Rp')
                     ->numeric()
                     ->sortable(),
-                TextColumn::make('quantity')
-                    ->sortable(),
-                TextColumn::make('category.name')
+                TextColumn::make('author.name')
                     ->sortable()
             ])
             ->filters([

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('type');
+            $table->boolean('is_active');
 
             $table->boolean('is_have_banner');
             $table->string('banner');

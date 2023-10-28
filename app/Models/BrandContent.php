@@ -13,6 +13,7 @@ class BrandContent extends Model
         'brand_id',
         'name',
         'type',
+        'is_active',
         'is_have_product',
         'product',
         'is_have_banner',

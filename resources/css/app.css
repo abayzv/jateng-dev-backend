@@ -1,3 +1,13 @@
+@import "../../vendor/filament/filament/resources/css/index.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.fi-sidebar-header, .fi-sidebar {
+    @apply dark:!bg-gray-800 !bg-white dark:!text-white;
+}
+/* 
+.fi-sidebar-item-icon{
+    @apply dark:!text-white;
+} */
