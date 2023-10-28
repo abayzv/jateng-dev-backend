@@ -16,12 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('type');
             $table->boolean('is_active');
-
-            $table->boolean('is_have_banner');
-            $table->string('banner');
-            $table->boolean('is_have_product');
-            $table->string('product');
-
+            $table->string('banner')->nullable();
             $table->string('meta_title');
             $table->string('meta_description');
             $table->string('meta_keywords');

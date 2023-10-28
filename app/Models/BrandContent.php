@@ -14,13 +14,20 @@ class BrandContent extends Model
         'name',
         'type',
         'is_active',
-        'is_have_product',
-        'product',
-        'is_have_banner',
         'banner',
         'meta_title',
         'meta_description',
         'meta_keywords',
         'meta_image',
     ];
+
+    public function brand()
+    {
+        return $this->belongsTo(Brand::class);
+    }
+
+    public function contentProducts()
+    {
+        return $this->hasMany(ContentProduct::class);
+    }
 }
