@@ -10,7 +10,17 @@ class ContentProduct extends Model
     use HasFactory;
 
     protected $fillable = [
-        'brand_content_id',
+        'content_id',
         'product_id',
     ];
+
+    public function content()
+    {
+        return $this->belongsTo(Content::class);
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
 }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class BrandContent extends Model
 {
@@ -14,11 +15,6 @@ class BrandContent extends Model
         'name',
         'type',
         'is_active',
-        'banner',
-        'meta_title',
-        'meta_description',
-        'meta_keywords',
-        'meta_image',
     ];
 
     public function brand()
@@ -26,8 +22,13 @@ class BrandContent extends Model
         return $this->belongsTo(Brand::class);
     }
 
-    public function contentProducts()
+    public function contents()
     {
-        return $this->hasMany(ContentProduct::class);
+        return $this->belongsToMany(Content::class, 'brand_content_groups');
+    }
+
+    public function content()
+    {
+        return $this->hasMany(BrandContentGroups::class);
     }
 }

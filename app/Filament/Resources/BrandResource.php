@@ -7,8 +7,11 @@ use App\Filament\Resources\BrandResource\RelationManagers;
 use App\Models\Brand;
 use Filament\Forms;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -22,6 +25,9 @@ class BrandResource extends Resource
 {
     protected static ?string $model = Brand::class;
 
+    protected static ?string $navigationGroup = 'Brands';
+    protected static ?int $navigationSort = 1;
+
     protected static ?string $navigationIcon = 'heroicon-o-building-office';
 
     public static function form(Form $form): Form
@@ -33,9 +39,7 @@ class BrandResource extends Resource
                     ->aside()
                     ->schema([
                         TextInput::make('name')
-                            ->autofocus()
                             ->required()
-                            ->unique()
                             ->placeholder(__('Name'))
                             ->maxLength(255),
 
@@ -48,6 +52,41 @@ class BrandResource extends Resource
                                 '4:3',
                                 '1:1',
                             ]),
+                    ]),
+
+                Section::make('Content')
+                    ->description('Add content')
+                    ->aside()
+                    ->visibleOn("edit")
+                    ->schema([
+                        Repeater::make('contentGroups')
+                            ->relationship('contentGroups')
+                            ->schema([
+                                Toggle::make('is_active')
+                                    ->label(__('Is Active')),
+
+                                TextInput::make('name')
+                                    ->required()
+                                    ->placeholder(__('Name'))
+                                    ->maxLength(255),
+
+                                Select::make('type')
+                                    ->options([
+                                        'category' => 'Category',
+                                        'slider' => 'Slider',
+                                    ])
+                                    ->placeholder(__('Type'))
+                                    ->required(),
+
+                                Repeater::make('content')
+                                    ->relationship('content')
+                                    ->simple(
+                                        Select::make('content_id')
+                                            ->relationship('content', 'name')
+                                            ->placeholder(__('Select Content'))
+                                            ->required(),
+                                    )
+                            ])
                     ])
             ]);
     }

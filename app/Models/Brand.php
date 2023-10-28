@@ -14,7 +14,7 @@ class Brand extends Model
         'image',
     ];
 
-    public function brandContents()
+    public function contentGroups()
     {
         return $this->hasMany(BrandContent::class);
     }

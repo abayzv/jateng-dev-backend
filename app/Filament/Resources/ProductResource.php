@@ -67,18 +67,18 @@ class ProductResource extends Resource
                             ->searchable()
                             ->preload()
                             ->required()
-                            ->placeholder(__('Category')),
+                            ->placeholder(__('Select Category')),
 
                         Select::make('brand_id')
                             ->relationship('brand', 'name')
                             ->searchable()
                             ->preload()
                             ->required()
-                            ->placeholder(__('Category')),
+                            ->placeholder(__('Select Brand')),
 
                         Select::make('user_id')
                             ->relationship('author', 'name')
-                            ->placeholder(__('User')),
+                            ->placeholder(__('Select Author')),
                     ]),
 
                 Section::make('Galleries')
@@ -99,10 +99,6 @@ class ProductResource extends Resource
                                 '1:1',
                             ]),
                     ])
-
-                // Forms\Components\BelongsToSelect::make('brand_id')
-                //     ->relationship('brand', 'name')
-                //     ->placeholder(__('Brand')),
             ]);
     }
 

@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('content_products', function (Blueprint $table) {
+        Schema::create('brand_content_groups', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('brand_content_id')->constrained();
             $table->foreignId('content_id')->constrained();
-            $table->foreignId('product_id')->constrained();
             $table->timestamps();
         });
     }
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('content_products');
+        Schema::dropIfExists('brand_content_groups');
     }
 };
