@@ -3,6 +3,7 @@
 namespace App\Filament\Pages;
 
 use App\Filament\Resources\YesResource\Widgets\StatsOverview;
+use App\Filament\Resources\YesResource\Widgets\CampaignClickChart;
 
 class Dashboard extends \Filament\Pages\Dashboard
 {
@@ -10,6 +11,7 @@ class Dashboard extends \Filament\Pages\Dashboard
     {
         return [
             StatsOverview::class,
+            CampaignClickChart::class,
         ];
     }
 }
