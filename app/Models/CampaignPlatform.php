@@ -11,6 +11,7 @@ class CampaignPlatform extends Model
 
     protected $fillable = [
         'platform',
+        'logo',
     ];
 
     public function campaignStats()

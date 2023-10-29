@@ -6,11 +6,13 @@ use App\Filament\Resources\CampaignPlatformResource\Pages;
 use App\Filament\Resources\CampaignPlatformResource\RelationManagers;
 use App\Models\CampaignPlatform;
 use Filament\Forms;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -35,9 +37,16 @@ class CampaignPlatformResource extends Resource
                         TextInput::make('platform')
                             ->autofocus()
                             ->required()
-                            ->unique()
                             ->placeholder(__('Platform name, e.g. Facebook, Instagram, etc.'))
                             ->maxLength(255),
+
+                        FileUpload::make('logo')
+                            ->image()
+                            ->imageEditor()
+                            ->imageEditorAspectRatios([
+                                null,
+                                '1:1',
+                            ]),
                     ])
             ]);
     }
@@ -46,6 +55,9 @@ class CampaignPlatformResource extends Resource
     {
         return $table
             ->columns([
+                ImageColumn::make('logo')
+                    ->circular(),
+
                 TextColumn::make('platform')
                     ->searchable()
                     ->sortable(),

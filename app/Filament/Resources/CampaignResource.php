@@ -16,6 +16,7 @@ use Filament\Forms\Form;
 use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -93,6 +94,9 @@ class CampaignResource extends Resource
                     ->searchable()
                     ->sortable(),
 
+                ImageColumn::make('platforms.logo')->circular()->stacked(),
+
+
                 TextColumn::make('location')
                     ->badge()
                     ->searchable()
@@ -106,9 +110,9 @@ class CampaignResource extends Resource
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('platforms_count')->counts('platforms')
-                    ->searchable()
-                    ->sortable(),
+                // TextColumn::make('platforms_count')->counts('platforms')
+                //     ->searchable()
+                //     ->sortable(),
 
                 TextColumn::make('created_at'),
             ])
