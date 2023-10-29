@@ -2,12 +2,11 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\CategoryResource\Pages;
-use App\Filament\Resources\CategoryResource\RelationManagers;
-use App\Models\Category;
+use App\Filament\Resources\CampaignPlatformResource\Pages;
+use App\Filament\Resources\CampaignPlatformResource\RelationManagers;
+use App\Models\CampaignPlatform;
 use Filament\Forms;
 use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -17,31 +16,28 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class CategoryResource extends Resource
+class CampaignPlatformResource extends Resource
 {
-    protected static ?string $model = Category::class;
+    protected static ?string $model = CampaignPlatform::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-folder';
+    protected static ?string $navigationGroup = 'Campaigns';
+
+    protected static ?string $navigationIcon = 'heroicon-o-computer-desktop';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Section::make('Category Information')
-                    ->description('Add category information')
+                Section::make('Campaign Platform')
+                    ->description('Add campaign platform')
                     ->aside()
                     ->schema([
-                        TextInput::make('name')
+                        TextInput::make('platform')
                             ->autofocus()
                             ->required()
                             ->unique()
-                            ->placeholder(__('Name'))
+                            ->placeholder(__('Platform name, e.g. Facebook, Instagram, etc.'))
                             ->maxLength(255),
-
-                        Select::make('parent_id')
-                            ->relationship('parent', 'name')
-                            ->placeholder(__('Parent Category'))
-                            ->nullable(),
                     ])
             ]);
     }
@@ -50,12 +46,12 @@ class CategoryResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name')
+                TextColumn::make('platform')
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('parent.name'),
-                TextColumn::make('products_count')->counts('products'),
+                TextColumn::make('campaigns_count')->counts('campaigns'),
+                TextColumn::make('created_at'),
             ])
             ->filters([
                 //
@@ -80,9 +76,9 @@ class CategoryResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListCategories::route('/'),
-            'create' => Pages\CreateCategory::route('/create'),
-            'edit' => Pages\EditCategory::route('/{record}/edit'),
+            'index' => Pages\ListCampaignPlatforms::route('/'),
+            'create' => Pages\CreateCampaignPlatform::route('/create'),
+            'edit' => Pages\EditCampaignPlatform::route('/{record}/edit'),
         ];
     }
 }
