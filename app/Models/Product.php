@@ -28,4 +28,9 @@ class Product extends Model
     {
         return $this->belongsTo(Brand::class);
     }
+
+    public function link()
+    {
+        return $this->hasOne(LinkProduct::class);
+    }
 }

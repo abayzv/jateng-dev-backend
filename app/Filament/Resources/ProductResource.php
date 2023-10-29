@@ -42,7 +42,6 @@ class ProductResource extends Resource
                         TextInput::make('name')
                             ->autofocus()
                             ->required()
-                            ->unique()
                             ->placeholder(__('Name'))
                             ->maxLength(255),
 
@@ -98,6 +97,26 @@ class ProductResource extends Resource
                                 '4:3',
                                 '1:1',
                             ]),
+                    ]),
+
+                Section::make('External Links')
+                    ->description('Add product external links')
+                    ->aside()
+                    ->collapsible()
+                    ->schema([
+                        Fieldset::make('link')
+                            ->relationship('link')
+                            ->columns(1)
+                            ->schema([
+                                TextInput::make('tokopedia')
+                                    ->placeholder(__('Tokopedia')),
+
+                                TextInput::make('shopee')
+                                    ->placeholder(__('Shopee')),
+
+                                TextInput::make('lazada')
+                                    ->placeholder(__('Lazada')),
+                            ])
                     ])
             ]);
     }
