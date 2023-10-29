@@ -93,11 +93,8 @@ class CampaignResource extends Resource
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('campaign_slug')
-                    ->searchable()
-                    ->sortable(),
-
                 TextColumn::make('location')
+                    ->badge()
                     ->searchable()
                     ->sortable(),
 
