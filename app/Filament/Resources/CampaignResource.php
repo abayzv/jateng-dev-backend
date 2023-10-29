@@ -144,4 +144,9 @@ class CampaignResource extends Resource
             'edit' => Pages\EditCampaign::route('/{record}/edit'),
         ];
     }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
 }
