@@ -8,6 +8,7 @@ use App\Models\Content;
 use Faker\Provider\ar_EG\Text;
 use Filament\Forms;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
@@ -52,6 +53,11 @@ class ContentResource extends Resource
                             ->required()
                             ->placeholder(__('Slug'))
                             ->maxLength(255),
+
+                        MarkdownEditor::make('description')
+                            ->required()
+                            ->maxLength(255)
+                            ->placeholder(__('Description')),
 
                         FileUpload::make('cover')
                             ->image()
