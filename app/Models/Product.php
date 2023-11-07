@@ -38,4 +38,9 @@ class Product extends Model
     {
         return $this->hasOne(ProductIdentifier::class);
     }
+
+    public function inventory()
+    {
+        return $this->hasOne(ProductInventory::class);
+    }
 }

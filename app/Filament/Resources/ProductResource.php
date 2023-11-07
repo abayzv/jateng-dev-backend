@@ -98,6 +98,27 @@ class ProductResource extends Resource
                             ->placeholder(__('Select Author')),
                     ]),
 
+                Section::make('Inventory')
+                    ->description('Manage product inventory')
+                    ->aside()
+                    ->collapsible()
+                    ->schema([
+                        Fieldset::make('inventory')
+                            ->relationship('inventory')
+                            ->columns(1)
+                            ->schema([
+                                TextInput::make('stock')
+                                    ->numeric()
+                                    ->placeholder(__('0')),
+                                Select::make('availability')
+                                    ->options([
+                                        'in_stock' => 'In Stock',
+                                        'always' => 'Always',
+                                    ])
+                                    ->placeholder(__('Select Availability')),
+                            ])
+                    ]),
+
                 Section::make('Galleries')
                     ->description('Add product galleries')
                     ->aside()
