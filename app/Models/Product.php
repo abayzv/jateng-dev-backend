@@ -33,4 +33,9 @@ class Product extends Model
     {
         return $this->hasOne(LinkProduct::class);
     }
+
+    public function identifier()
+    {
+        return $this->hasOne(ProductIdentifier::class);
+    }
 }

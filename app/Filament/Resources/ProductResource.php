@@ -10,6 +10,7 @@ use Filament\Forms;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;
@@ -46,10 +47,26 @@ class ProductResource extends Resource
                             ->placeholder(__('Name'))
                             ->maxLength(255),
 
-                        RichEditor::make('description')
+                        MarkdownEditor::make('description')
                             ->required()
                             ->maxLength(255)
                             ->placeholder(__('Description')),
+                    ]),
+
+                Section::make('Product Identifier')
+                    ->description('Add product identifier')
+                    ->aside()
+                    ->collapsible()
+                    ->schema([
+                        Fieldset::make('identifier')
+                            ->relationship('identifier')
+                            ->columns(1)
+                            ->schema([
+                                TextInput::make('sku')
+                                    ->placeholder(__('sku')),
+                                TextInput::make('upc')
+                                    ->placeholder(__('upc')),
+                            ])
                     ]),
 
                 Section::make('Information')
@@ -110,13 +127,13 @@ class ProductResource extends Resource
                             ->columns(1)
                             ->schema([
                                 TextInput::make('tokopedia')
-                                    ->placeholder(__('Tokopedia')),
+                                    ->placeholder(__('https://')),
 
                                 TextInput::make('shopee')
-                                    ->placeholder(__('Shopee')),
+                                    ->placeholder(__('https://')),
 
                                 TextInput::make('lazada')
-                                    ->placeholder(__('Lazada')),
+                                    ->placeholder(__('https://')),
                             ])
                     ])
             ]);
