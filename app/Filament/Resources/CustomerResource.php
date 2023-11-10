@@ -41,13 +41,6 @@ class CustomerResource extends Resource
                             ->hiddenOn(['edit'])
                             ->placeholder(__('Email'))
                             ->maxLength(255),
-                        Select::make('user.email')
-                            ->relationship('user', 'email')
-                            ->disabled()
-                            ->autofocus()
-                            ->label(__('Email'))
-                            ->required()
-                            ->hiddenOn(['create']),
                         TextInput::make('first_name')
                             ->autofocus()
                             ->required()
@@ -58,6 +51,13 @@ class CustomerResource extends Resource
                             ->required()
                             ->placeholder(__('Last Name'))
                             ->maxLength(255),
+                        Select::make('user.email')
+                            ->relationship('user', 'email')
+                            ->disabled()
+                            ->autofocus()
+                            ->label(__('Email'))
+                            ->required()
+                            ->hiddenOn(['create']),
                         TextInput::make('phone_number')
                             ->numeric()
                             ->autofocus()
@@ -83,12 +83,13 @@ class CustomerResource extends Resource
                     ->label(__('Email'))
                     ->sortable()
                     ->searchable()
-                    ->url(fn (Customer $customer) => "mailto:{$customer->email}"),
+                // ->url(fn (Customer $customer) => "mailto:{$customer->email}"),
             ])
             ->filters([
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -111,6 +112,7 @@ class CustomerResource extends Resource
             'index' => Pages\ListCustomers::route('/'),
             'create' => Pages\CreateCustomer::route('/create'),
             'edit' => Pages\EditCustomer::route('/{record}/edit'),
+            'view' => Pages\ViewCustomer::route('/{record}'),
         ];
     }
 }
