@@ -12,8 +12,11 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ViewColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class CustomerResource extends Resource
@@ -31,10 +34,20 @@ class CustomerResource extends Resource
                     ->aside()
                     ->collapsible()
                     ->schema([
-                        Select::make('user_id')
-                            ->relationship('user', 'name')
-                            ->placeholder(__('Select User'))
-                            ->required(),
+                        TextInput::make('user.email')
+                            ->autofocus()
+                            ->required()
+                            ->email()
+                            ->hiddenOn(['edit'])
+                            ->placeholder(__('Email'))
+                            ->maxLength(255),
+                        Select::make('user.email')
+                            ->relationship('user', 'email')
+                            ->disabled()
+                            ->autofocus()
+                            ->label(__('Email'))
+                            ->required()
+                            ->hiddenOn(['create']),
                         TextInput::make('first_name')
                             ->autofocus()
                             ->required()
@@ -60,7 +73,17 @@ class CustomerResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('full_name')
+                    ->sortable()
+                    ->searchable(['first_name', 'last_name'])
+                    ->state(function (Model $record): string {
+                        return $record->first_name . ' ' . $record->last_name;
+                    }),
+                TextColumn::make('user.email')
+                    ->label(__('Email'))
+                    ->sortable()
+                    ->searchable()
+                    ->url(fn (Customer $customer) => "mailto:{$customer->email}"),
             ])
             ->filters([
                 //
