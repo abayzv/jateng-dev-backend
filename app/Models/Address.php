@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Services\DistanceCalculator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Address extends Model
 {
     use HasFactory;
+    protected $distanceCalculator;
 
     protected $fillable = [
         "customer_id",
@@ -24,4 +26,12 @@ class Address extends Model
         "latitude",
         "longitude",
     ];
+
+    public function calculateDistance()
+    {
+        $calculator = new DistanceCalculator();
+        $distance = $calculator->calculateDistance($this->latitude, $this->longitude, -6.914744, 107.609810, "K");
+        // make distance to int
+        return round($distance);
+    }
 }

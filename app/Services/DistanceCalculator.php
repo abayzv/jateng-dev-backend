@@ -2,9 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\Contracts\DistanceCalculator;
-
-class MahestoreDistanceCalculator implements DistanceCalculator
+class DistanceCalculator
 {
     public function calculateDistance($lat1, $lon1, $lat2, $lon2, $unit)
     {

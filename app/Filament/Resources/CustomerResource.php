@@ -113,6 +113,7 @@ class CustomerResource extends Resource
             'create' => Pages\CreateCustomer::route('/create'),
             'edit' => Pages\EditCustomer::route('/{record}/edit'),
             'view' => Pages\ViewCustomer::route('/{record}'),
+            // 'address' => Pages\ViewCustomerAddress::route('/{record}/address/{address_id}'),
         ];
     }
 }
