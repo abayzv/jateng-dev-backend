@@ -6,15 +6,22 @@ use App\Filament\Resources\PostResource\Pages;
 use App\Filament\Resources\PostResource\RelationManagers;
 use App\Models\Post;
 use Filament\Forms;
+use Filament\Forms\Components\Card;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Section;
+use Filament\Forms\Components\MarkdownEditor;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Forms\Set;
 use Filament\Resources\Resource;
+use Filament\Support\Markdown;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Str;
 
 class PostResource extends Resource
 {
@@ -27,23 +34,43 @@ class PostResource extends Resource
     {
         return $form
             ->schema([
-                Section::make('')
-                    ->aside()
-                    ->collapsible()
+                Card::make()
+                    ->columns(2)
                     ->schema([
-                        Grid::make()
-                            ->schema([
-                                TextInput::make('title')
-                                    ->autofocus()
-                                    ->required()
-                                    ->placeholder(__('Title'))
-                                    ->maxLength(255),
-                                TextInput::make('slug')
-                                    ->autofocus()
-                                    ->required()
-                                    ->placeholder(__('Slug'))
-                                    ->maxLength(255),
-                            ])
+                        TextInput::make('title')
+                            ->columnSpan(2)
+                            ->autofocus()
+                            ->required()
+                            ->placeholder(__('Title'))
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(fn (Set $set, ?string $state) => $set('slug', Str::slug($state)))
+                            ->maxLength(255),
+                        TextInput::make('slug')
+                            ->autofocus()
+                            ->required()
+                            ->placeholder(__('Slug'))
+                            ->maxLength(255),
+                        Select::make('category_id')
+                            ->relationship('category', 'name')
+                            ->placeholder(__('Select Category'))
+                            ->searchable()
+                            ->preload()
+                            ->nullable(),
+                        TextInput::make('excerpt')
+                            ->autofocus()
+                            ->columnSpan(2)
+                            ->required()
+                            ->placeholder(__('Excerpt'))
+                            ->maxLength(255),
+                        MarkdownEditor::make('content')
+                            ->autofocus()
+                            ->columnSpan(2)
+                            ->required()
+                            ->placeholder(__('Content')),
+                        FileUpload::make('featured_image')
+                            ->image()
+                            ->imageEditor()
+                            ->columnSpan(2)
                     ]),
             ]);
     }
@@ -52,7 +79,23 @@ class PostResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('title')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('author.name')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('status')
+                    ->badge()
+                    ->sortable()
+                    ->color(fn (Post $record) => match ($record->status) {
+                        'draft' => 'gray',
+                        'published' => 'green',
+                        'archived' => 'red',
+                    }),
+                TextColumn::make('published_at')
+                    ->sortable()
+                    ->default('Not Published')
             ])
             ->filters([
                 //
