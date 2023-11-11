@@ -105,8 +105,6 @@ class PostResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
                 Action::make('publish')
                     ->action(function (Post $record) {
                         if ($record->status === 'published') {
@@ -140,6 +138,8 @@ class PostResource extends Resource
                         'published' => 'danger',
                         'archived' => 'success',
                     }),
+                Tables\Actions\ViewAction::make(),
+                Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
