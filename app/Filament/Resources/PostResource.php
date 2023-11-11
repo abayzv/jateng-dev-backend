@@ -14,10 +14,14 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Forms\Set;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Support\Markdown;
 use Filament\Tables;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ToggleColumn;
+use Filament\Tables\Columns\ViewColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -90,12 +94,12 @@ class PostResource extends Resource
                     ->sortable()
                     ->color(fn (Post $record) => match ($record->status) {
                         'draft' => 'gray',
-                        'published' => 'green',
+                        'published' => 'success',
                         'archived' => 'red',
                     }),
                 TextColumn::make('published_at')
                     ->sortable()
-                    ->default('Not Published')
+                    ->default('Not Published'),
             ])
             ->filters([
                 //
@@ -103,6 +107,37 @@ class PostResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Action::make('publish')
+                    ->action(function (Post $record) {
+                        if ($record->status === 'published') {
+                            $record->update(['status' => 'draft']);
+                            Notification::make()
+                                ->title('Post Unpublished')
+                                ->body('The post has been unpublished.')
+                                ->send();
+                        } else {
+                            $record->update(['status' => 'published', 'published_at' => now()]);
+                            Notification::make()
+                                ->title('Post Published')
+                                ->body('The post has been published.')
+                                ->send();
+                        }
+                    })
+                    ->label(fn (Post $record) => match ($record->status) {
+                        'draft' => 'Publish',
+                        'published' => 'Unpublish',
+                        'archived' => 'Publish',
+                    })
+                    ->icon(fn (Post $record) => match ($record->status) {
+                        'draft' => 'heroicon-o-check-circle',
+                        'published' => 'heroicon-o-x-circle',
+                        'archived' => 'heroicon-o-check-circle',
+                    })
+                    ->color(fn (Post $record) => match ($record->status) {
+                        'draft' => 'success',
+                        'published' => 'danger',
+                        'archived' => 'success',
+                    }),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
