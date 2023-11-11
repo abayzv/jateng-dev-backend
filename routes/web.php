@@ -2,6 +2,7 @@
 
 use App\Livewire\Addresses\Show;
 use Illuminate\Support\Facades\Route;
+use Filament\Notifications\Notification;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,4 +21,17 @@ Route::get('/', function () {
 
 Route::get('/api/documentation', function () {
     return view('docs.index');
+});
+
+
+Route::get('/test-notif', function () {
+    $admin = App\Models\User::find(1);
+    $admin->notify(
+        Notification::make()
+            ->title('New User')
+            ->body('A new user has registered.')
+            ->success()
+            ->send()
+            ->toDatabase()
+    );
 });
