@@ -11,6 +11,7 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Forms\Set;
@@ -71,6 +72,7 @@ class PostResource extends Resource
                             ->columnSpan(2)
                             ->required()
                             ->placeholder(__('Content')),
+                        TagsInput::make('tags')->separator(',')->placeholder(__('Tags'))->splitKeys(["Tab", " "]),
                         FileUpload::make('featured_image')
                             ->image()
                             ->imageEditor()
@@ -140,6 +142,7 @@ class PostResource extends Resource
                     }),
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make()->after(fn (Post $record) => $record->tags()->delete()),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

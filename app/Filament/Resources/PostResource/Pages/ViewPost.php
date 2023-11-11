@@ -16,4 +16,10 @@ class ViewPost extends ViewRecord
             Actions\EditAction::make(),
         ];
     }
+
+    protected function mutateFormDataBeforeFill(array $data): array
+    {
+        $data['tags'] = $this->record->tags()->pluck('tags')->toArray();
+        return $data;
+    }
 }

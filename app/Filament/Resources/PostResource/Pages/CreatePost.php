@@ -12,6 +12,13 @@ class CreatePost extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
+        $tags = explode(',', $data['tags']);
+        foreach ($tags as $tag) {
+            $this->record->tags()->updateOrCreate([
+                'tags' => $tag,
+            ]);
+        }
+
         $data['author_id'] = auth()->user()->id;
         return $data;
     }
