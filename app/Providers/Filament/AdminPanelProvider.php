@@ -42,6 +42,7 @@ class AdminPanelProvider extends PanelProvider
                 // StatsOverview::class,
                 // CampaignClickChart::class,
             ])
+            ->databaseNotifications()
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
