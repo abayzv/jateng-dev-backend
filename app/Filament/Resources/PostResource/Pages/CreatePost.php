@@ -15,4 +15,9 @@ class CreatePost extends CreateRecord
         $data['author_id'] = auth()->user()->id;
         return $data;
     }
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }

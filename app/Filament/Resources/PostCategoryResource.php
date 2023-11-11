@@ -5,13 +5,20 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\PostCategoryResource\Pages;
 use App\Filament\Resources\PostCategoryResource\RelationManagers;
 use App\Models\PostCategory;
+use Faker\Provider\ar_EG\Text;
 use Filament\Forms;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Str;
 
 class PostCategoryResource extends Resource
 {
@@ -24,7 +31,28 @@ class PostCategoryResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Section::make('Post Category')
+                    ->description('Post Category Details')
+                    ->aside()
+                    ->schema([
+                        TextInput::make('name')
+                            ->required()
+                            ->placeholder(__('Name'))
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(fn (Set $set, ?string $state) => $set('slug', Str::slug($state)))
+                            ->maxLength(255),
+
+                        TextInput::make('slug')
+                            ->required()
+                            ->placeholder(__('Slug'))
+                            ->maxLength(255),
+                        Select::make('parent_id')
+                            ->relationship('parent', 'name')
+                            ->placeholder(__('Select Parent Category'))
+                            ->nullable()
+                            ->searchable()
+                            ->preload()
+                    ])
             ]);
     }
 
@@ -32,7 +60,11 @@ class PostCategoryResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('name')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('posts_count')
+                    ->counts('posts'),
             ])
             ->filters([
                 //
