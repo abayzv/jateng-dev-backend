@@ -114,12 +114,14 @@ class PostResource extends Resource
                             Notification::make()
                                 ->title('Post Unpublished')
                                 ->body('The post has been unpublished.')
+                                ->success()
                                 ->send();
                         } else {
                             $record->update(['status' => 'published', 'published_at' => now()]);
                             Notification::make()
                                 ->title('Post Published')
                                 ->body('The post has been published.')
+                                ->success()
                                 ->send();
                         }
                     })
