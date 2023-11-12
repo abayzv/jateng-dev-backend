@@ -11,7 +11,7 @@ class Dashboard extends \Filament\Pages\Dashboard
     {
         return [
             StatsOverview::class,
-            CampaignClickChart::class,
+            // CampaignClickChart::class,
         ];
     }
 }
