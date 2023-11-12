@@ -20,6 +20,7 @@ use Filament\Resources\Resource;
 use Filament\Support\Markdown;
 use Filament\Tables;
 use Filament\Tables\Actions\Action;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Columns\ViewColumn;
@@ -95,9 +96,9 @@ class PostResource extends Resource
                     ->badge()
                     ->sortable()
                     ->color(fn (Post $record) => match ($record->status) {
-                        'draft' => 'gray',
+                        'draft' => 'danger',
                         'published' => 'success',
-                        'archived' => 'red',
+                        'archived' => 'gray',
                     }),
                 TextColumn::make('comments_count')
                     ->label('Comments')
@@ -143,9 +144,11 @@ class PostResource extends Resource
                         'published' => 'danger',
                         'archived' => 'success',
                     }),
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make()->after(fn (Post $record) => $record->tags()->delete()),
+                ActionGroup::make([
+                    Tables\Actions\ViewAction::make(),
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\DeleteAction::make()->after(fn (Post $record) => $record->tags()->delete()),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

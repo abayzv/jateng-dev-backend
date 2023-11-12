@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Coment extends Model
+class Comment extends Model
 {
     use HasFactory;
 
@@ -14,8 +14,13 @@ class Coment extends Model
         'body',
     ];
 
-    public function comentable()
+    public function commentable()
     {
         return $this->morphTo();
+    }
+
+    public function author()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }
