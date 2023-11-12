@@ -18,6 +18,19 @@
 
     @filamentStyles
     @vite('resources/css/app.css')
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GFP1L890KE"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'G-GFP1L890KE');
+    </script>
 </head>
 
 <body class="antialiased">
