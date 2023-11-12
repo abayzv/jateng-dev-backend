@@ -99,6 +99,9 @@ class PostResource extends Resource
                         'published' => 'success',
                         'archived' => 'red',
                     }),
+                TextColumn::make('comments_count')
+                    ->label('Comments')
+                    ->counts('comments'),
                 TextColumn::make('published_at')
                     ->sortable()
                     ->default('Not Published'),

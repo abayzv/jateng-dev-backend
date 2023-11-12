@@ -40,4 +40,9 @@ class Post extends Model
     {
         return $this->morphMany(Tag::class, 'taggable');
     }
+
+    public function comments()
+    {
+        return $this->morphMany(Coment::class, 'comentable');
+    }
 }
