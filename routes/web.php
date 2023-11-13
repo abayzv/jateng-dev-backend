@@ -20,7 +20,18 @@ use Illuminate\Support\Facades\Log;
 |
 */
 
-Route::get('/', function () {
+Route::get('/', function (Request $request) {
+    // get session time
+    // $startTime = $request->session()->get('start_time');
+    // $endTime = now();
+    // $timeSpent = $endTime->diffInSeconds($startTime);
+    // dd($timeSpent);
+
+    // get IP address
+    $ip = $request->ip();
+    $userAgent = $request->userAgent();
+    dd($userAgent);
+
     $event = [
         "message" => "user logged in"
     ];
@@ -34,8 +45,12 @@ Route::get('/api/documentation', function () {
 });
 
 Route::get('/user-leave', function (Request $request) {
-    $userSession = $request->timeSpent;
-    $message = "user left after {$userSession} seconds";
+    // get session time
+    $startTime = $request->session()->get('start_time');
+    $endTime = now();
+    $timeSpent = $endTime->diffInSeconds($startTime);
+    $message = "user left after $timeSpent seconds";
+
     $event = [
         "message" => $message
     ];
