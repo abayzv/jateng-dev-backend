@@ -839,7 +839,7 @@
         }
         gtag('js', new Date());
 
-        gtag('config', '{{ env("GOOGLE_TAGS_ID") }}');
+        gtag('config', '{{ env('GOOGLE_TAGS_ID') }}');
     </script>
 </head>
 
@@ -1026,6 +1026,17 @@
             </div>
         </div>
     </div>
+
+    <script>
+        const startTime = Date.now();
+        window.addEventListener('beforeunload', function(e) {
+            const endTime = Date.now();
+            const timeSpent = (endTime - startTime) / 1000;
+            window.fetch(`/user-leave?timeSpent=${timeSpent}`, {
+                method: 'GET',
+            });
+        });
+    </script>
 </body>
 
 </html>
