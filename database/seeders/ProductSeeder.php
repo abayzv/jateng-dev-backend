@@ -88,7 +88,7 @@ class ProductSeeder extends Seeder
             "brand_id" => $logitech->id,
             "category_id" => $categories1->id,
             "user_id"  => 1,
-            "images" => ["https://images.tokopedia.net/img/cache/900/VqbcmM/2021/6/2/9f0b8b1e-9b0a-4b0a-9b0a-4b0a9b0a4b0a-4b0a9b0a-4b0a-9b0a-4b0a9b0a4b0a.jpg"],
+            "images" => ["https://images.tokopedia.net/img/cache/900/VqbcmM/2023/10/24/fac2a1d1-6a74-4ca4-bfa3-b1e6c2aa0bed.jpg"],
         ]);
     }
 }
