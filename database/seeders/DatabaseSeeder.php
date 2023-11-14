@@ -3,8 +3,6 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Role;
-use App\Models\User;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,38 +11,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        Role::create([
-            'name' => 'admin',
+        $this->call([
+            UserSeeder::class,
+            ProductSeeder::class,
         ]);
-
-        Role::create([
-            'name' => 'customer',
-        ]);
-
-        Role::create([
-            'name' => 'author',
-        ]);
-
-        $user = User::factory()->create([
-            'name' => 'admin',
-            'email' => 'admin@admin.com',
-            'password' => bcrypt('P@ssw0rd'),
-        ]);
-
-        $customer = User::factory()->create([
-            'name' => 'customer',
-            'email' => 'customer@customer.com',
-            'password' => bcrypt('P@ssw0rd'),
-        ]);
-
-        $author = User::factory()->create([
-            'name' => 'author',
-            'email' => 'author@author.com',
-            'password' => bcrypt('P@ssw0rd'),
-        ]);
-
-        $user->assignRole('admin');
-        $customer->assignRole('customer');
-        $author->assignRole('author');
     }
 }

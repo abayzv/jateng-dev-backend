@@ -109,12 +109,14 @@ class ProductResource extends Resource
                             ->schema([
                                 TextInput::make('stock')
                                     ->numeric()
+                                    ->default(0)
                                     ->placeholder(__('0')),
                                 Select::make('availability')
                                     ->options([
                                         'in_stock' => 'In Stock',
                                         'always' => 'Always',
                                     ])
+                                    ->default('always')
                                     ->placeholder(__('Select Availability')),
                             ])
                     ]),
