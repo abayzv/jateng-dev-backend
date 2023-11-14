@@ -5,6 +5,7 @@ namespace App\Filament\Resources\PostResource\Pages;
 use App\Filament\Resources\PostResource;
 use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
+use Illuminate\Database\Eloquent\Model;
 
 class CreatePost extends CreateRecord
 {
@@ -12,13 +13,6 @@ class CreatePost extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        $tags = explode(',', $data['tags']);
-        foreach ($tags as $tag) {
-            $this->record->tags()->updateOrCreate([
-                'tags' => $tag,
-            ]);
-        }
-
         $data['author_id'] = auth()->user()->id;
         return $data;
     }
@@ -26,5 +20,21 @@ class CreatePost extends CreateRecord
     protected function getRedirectUrl(): string
     {
         return $this->getResource()::getUrl('index');
+    }
+
+    protected function handleRecordCreation(array $data): Model
+    {
+        // save the record
+        $record = static::getModel()::create($data);
+
+        // save the tags
+        $tags = explode(',', $data['tags']);
+        foreach ($tags as $tag) {
+            $record->tags()->updateOrCreate([
+                'tags' => $tag,
+            ]);
+        }
+
+        return $record;
     }
 }

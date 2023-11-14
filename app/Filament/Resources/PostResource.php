@@ -56,7 +56,7 @@ class PostResource extends Resource
                             ->required()
                             ->placeholder(__('Slug'))
                             ->maxLength(255),
-                        Select::make('category_id')
+                        Select::make('post_category_id')
                             ->relationship('category', 'name')
                             ->placeholder(__('Select Category'))
                             ->searchable()
