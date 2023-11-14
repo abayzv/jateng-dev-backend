@@ -70,8 +70,8 @@ class CampaignResource extends Resource
                             ->placeholder(__('End Date')),
                     ]),
 
-                Section::make('Campaign Content')
-                    ->description('This will be used as the campaign content')
+                Section::make('Campaign Platform')
+                    ->description('Add campaign platform')
                     ->aside()
                     ->schema([
                         Repeater::make('stats')
