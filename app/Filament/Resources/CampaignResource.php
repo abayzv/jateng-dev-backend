@@ -65,6 +65,7 @@ class CampaignResource extends Resource
                     ->schema([
                         Select::make('location')
                             ->options([
+                                "national" => "National",
                                 "jakarta" => "Jakarta",
                                 "bandung" => "Bandung",
                                 "surabaya" => "Surabaya",
