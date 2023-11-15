@@ -52,6 +52,17 @@ class CampaignResource extends Resource
                             ->placeholder(__('Campaign slug'))
                             ->maxLength(255),
 
+                        TextInput::make('url')
+                            ->required()
+                            ->placeholder(__('Campaign URL'))
+                            ->maxLength(255),
+
+                    ]),
+
+                Section::make('Campaign Location')
+                    ->description('Add campaign location')
+                    ->aside()
+                    ->schema([
                         Select::make('location')
                             ->options([
                                 "jakarta" => "Jakarta",
@@ -62,7 +73,13 @@ class CampaignResource extends Resource
                             ])
                             ->required()
                             ->placeholder(__('Select Location')),
+                    ]),
 
+
+                Section::make('Campaign Time')
+                    ->description('Add campaign time')
+                    ->aside()
+                    ->schema([
                         DatePicker::make('start_date')
                             ->placeholder(__('Start Date')),
 

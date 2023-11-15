@@ -13,6 +13,7 @@ class Campaign extends Model
         'content_id',
         'campaign_name',
         'campaign_slug',
+        'url',
         'location',
         'start_date',
         'end_date',
