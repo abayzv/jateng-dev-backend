@@ -174,6 +174,7 @@ return [
         App\Providers\TenancyServiceProvider::class,
         PHPOpenSourceSaver\JWTAuth\Providers\LaravelServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
+        OwenIt\Auditing\AuditingServiceProvider::class,
     ])->toArray(),
 
     /*

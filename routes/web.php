@@ -30,7 +30,7 @@ Route::get('/', function (Request $request) {
     // get IP address
     $ip = $request->ip();
     $userAgent = $request->userAgent();
-    dd($userAgent);
+    // dd($userAgent);
 
     $event = [
         "message" => "user logged in"
@@ -40,24 +40,24 @@ Route::get('/', function (Request $request) {
     return view('welcome');
 });
 
-Route::get('/api/documentation', function () {
-    return view('docs.index');
-});
+// Route::get('/api/documentation', function () {
+//     return view('docs.index');
+// });
 
-Route::get('/user-leave', function (Request $request) {
-    // get session time
-    $startTime = $request->session()->get('start_time');
-    $endTime = now();
-    $timeSpent = $endTime->diffInSeconds($startTime);
-    $message = "user left after $timeSpent seconds";
+// Route::get('/user-leave', function (Request $request) {
+//     // get session time
+//     $startTime = $request->session()->get('start_time');
+//     $endTime = now();
+//     $timeSpent = $endTime->diffInSeconds($startTime);
+//     $message = "user left after $timeSpent seconds";
 
-    $event = [
-        "message" => $message
-    ];
-    AnalyticsEvent::dispatch($event);
-});
+//     $event = [
+//         "message" => $message
+//     ];
+//     AnalyticsEvent::dispatch($event);
+// });
 
-Route::get('/download', function (Request $request) {
-    $upload = uploadImageFromUrl($request->url);
-    return $upload;
-});
+// Route::get('/download', function (Request $request) {
+//     $upload = uploadImageFromUrl($request->url);
+//     return $upload;
+// });
