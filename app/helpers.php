@@ -75,3 +75,19 @@ function createValidator($schema)
 
     return $rules;
 }
+
+function uploadImageFromUrl($url)
+{
+    try {
+        $image = file_get_contents($url);
+        $urlExtension = explode('.', $url);
+        $extension = end($urlExtension);
+        $imageName = time() . '.' . $extension;
+        file_put_contents(public_path('storage/' . $imageName), $image);
+
+        return $imageName;
+    } catch (\Throwable $th) {
+        Log::error($th->getMessage());
+        return $th->getMessage();
+    }
+}

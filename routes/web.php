@@ -56,3 +56,8 @@ Route::get('/user-leave', function (Request $request) {
     ];
     AnalyticsEvent::dispatch($event);
 });
+
+Route::get('/download', function (Request $request) {
+    $upload = uploadImageFromUrl($request->url);
+    return $upload;
+});

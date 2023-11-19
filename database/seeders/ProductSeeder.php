@@ -61,6 +61,19 @@ class ProductSeeder extends Seeder
         ]);
         // End Create Categories
 
+        // Upload Image
+        $imageUrl = [
+            "https://images.tokopedia.net/img/cache/900/VqbcmM/2023/10/24/b4523843-8289-4f39-a253-3bad8fc7ca67.jpg",
+            "https://images.tokopedia.net/img/cache/900/VqbcmM/2023/10/24/63c2732e-3d3e-442b-9005-64323e7951ce.jpg",
+            "https://images.tokopedia.net/img/cache/900/VqbcmM/2023/7/20/1c169bd2-201b-4767-941c-a11e3dd97916.jpg",
+        ];
+        $image = [];
+        foreach ($imageUrl as $value) {
+            $url = uploadImageFromUrl($value);
+            array_push($image, $url);
+        }
+        // End Upload Image
+
         $product1 = Product::create([
             "name" => "Logitech G923 True Force Wheel + Logitech Driving Shifter Bundling",
             "description" => "Logitech G923 True Force Wheel + Logitech Driving Shifter Bundling",
@@ -68,7 +81,7 @@ class ProductSeeder extends Seeder
             "brand_id" => $logitech->id,
             "category_id" => $categories1->id,
             "user_id" => 1,
-            "images" => ["https://images.tokopedia.net/img/cache/900/VqbcmM/2023/10/24/fac2a1d1-6a74-4ca4-bfa3-b1e6c2aa0bed.jpg"],
+            "images" => [$image[0]],
         ]);
 
         $product2 = Product::create([
@@ -78,7 +91,7 @@ class ProductSeeder extends Seeder
             "brand_id" => $logitech->id,
             "category_id" => $categories1->id,
             "user_id"  => 1,
-            "images" => ["https://images.tokopedia.net/img/cache/900/VqbcmM/2023/10/24/fac2a1d1-6a74-4ca4-bfa3-b1e6c2aa0bed.jpg"],
+            "images" => [$image[1]],
         ]);
 
         $product3 = Product::create([
@@ -88,7 +101,7 @@ class ProductSeeder extends Seeder
             "brand_id" => $logitech->id,
             "category_id" => $categories1->id,
             "user_id"  => 1,
-            "images" => ["https://images.tokopedia.net/img/cache/900/VqbcmM/2023/10/24/fac2a1d1-6a74-4ca4-bfa3-b1e6c2aa0bed.jpg"],
+            "images" => [$image[2]],
         ]);
     }
 }
