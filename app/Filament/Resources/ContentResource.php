@@ -29,9 +29,6 @@ class ContentResource extends Resource
 {
     protected static ?string $model = Content::class;
 
-    protected static ?string $navigationGroup = 'Brands';
-    protected static ?int $navigationSort = 2;
-
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form

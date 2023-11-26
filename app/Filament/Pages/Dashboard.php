@@ -9,9 +9,6 @@ class Dashboard extends \Filament\Pages\Dashboard
 {
     public function getWidgets(): array
     {
-        return [
-            StatsOverview::class,
-            // CampaignClickChart::class,
-        ];
+        return [];
     }
 }
